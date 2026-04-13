@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kiểm tra nhận thức – Digital Leaders Coaching</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f4f5f7;color:#1a1a1a;min-height:100vh}
+.wrap{max-width:780px;margin:0 auto;padding:1.5rem 1rem}
+.card{background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:1.5rem;margin-bottom:1rem}
+.header{position:sticky;top:0;z-index:20;background:#fff;border:1px solid #e0e0e0;border-radius:14px;padding:.9rem 1.25rem;margin-bottom:1.25rem;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.timer{font-size:16px;font-weight:600;padding:6px 16px;border-radius:8px;border:1.5px solid #378ADD;color:#378ADD;letter-spacing:.04em}
+.timer.warn{color:#c0392b;border-color:#c0392b;background:#fef5f5;animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+.prog-text{font-size:14px;font-weight:500}
+.prog-sub{font-size:12px;color:#777;margin-top:2px}
+.pb{height:4px;background:#e8e8e8;border-radius:2px;margin-bottom:1.25rem}
+.pb-fill{height:100%;background:#378ADD;border-radius:2px;transition:width .3s}
+.q-nav{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:1.25rem}
+.dot{width:30px;height:30px;border-radius:50%;border:1.5px solid #d0d0d0;font-size:11px;font-weight:500;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;color:#555}
+.dot:hover{border-color:#378ADD;color:#378ADD}
+.dot.done{background:#EBF5FF;border-color:#378ADD;color:#1a6fb5}
+.dot.cur{background:#378ADD;border-color:#378ADD;color:#fff}
+.q-card{border:1px solid #e0e0e0;border-radius:14px;padding:1.25rem;background:#fff;margin-bottom:1rem}
+.badge{display:inline-block;padding:3px 10px;border-radius:6px;font-size:11px;font-weight:600;margin-bottom:.6rem;letter-spacing:.03em}
+.b-ly{background:#e8f5e9;color:#2e7d32}
+.b-th{background:#e3f2fd;color:#1565c0}.b-df-e{background:#f6ffed;color:#2e7d32}.b-df-m{background:#fff7e6;color:#ad6800}.b-df-h{background:#fff1f0;color:#c62828}.group-title{font-size:18px;font-weight:700;margin:1.25rem 0 .75rem}.group-sub{font-size:12px;color:#777;margin-bottom:.75rem}.meta-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:.7rem}.q-tags{font-size:12px;color:#666;line-height:1.6;margin:.2rem 0 .8rem}.q-tags strong{color:#444}
+.q-num{font-size:12px;color:#999;margin-bottom:.3rem}
+.q-text{font-size:15px;line-height:1.65;margin-bottom:.9rem;font-weight:400}
+.opt{display:flex;align-items:flex-start;gap:10px;padding:10px 13px;border-radius:9px;border:1.5px solid #e8e8e8;margin-bottom:7px;cursor:pointer;transition:all .15s}
+.opt:hover{border-color:#a8c8f0;background:#f0f7ff}
+.opt.sel{border-color:#378ADD;background:#EBF5FF}
+.opt.correct{border-color:#2e7d32;background:#e8f5e9}
+.opt.wrong{border-color:#c62828;background:#fce4e4}
+.opt input[type=radio]{width:16px;height:16px;accent-color:#378ADD;flex-shrink:0;margin-top:2px}
+.opt label{font-size:14px;line-height:1.55;cursor:pointer}
+.nav-btns{display:flex;gap:8px;justify-content:flex-end;margin-top:1.25rem}
+.btn{padding:9px 20px;border-radius:9px;border:1.5px solid #d0d0d0;background:#fff;font-size:14px;cursor:pointer;font-family:inherit;color:#333;font-weight:500;transition:all .15s}
+.btn:hover{background:#f5f5f5;border-color:#aaa}
+.btn-primary{background:#378ADD;color:#fff;border-color:#378ADD}
+.btn-primary:hover{background:#1a6fb5;border-color:#1a6fb5}
+.btn-danger{background:#c62828;color:#fff;border-color:#c62828}
+.btn-danger:hover{background:#9b1b1b}
+.screen{display:none}
+.screen.on{display:block}
+/* Start screen */
+.start-wrap{text-align:center;padding:1rem}
+.logo{font-size:12px;font-weight:600;letter-spacing:.1em;color:#378ADD;text-transform:uppercase;margin-bottom:.6rem}
+.start-title{font-size:26px;font-weight:700;margin-bottom:.5rem;letter-spacing:-.02em}
+.start-sub{color:#666;font-size:14px;margin-bottom:1.5rem}
+.set-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:1.25rem 0}
+.set-item{border:2px solid #e0e0e0;border-radius:12px;padding:1rem .75rem;cursor:pointer;text-align:center;transition:all .15s}
+.set-item:hover{border-color:#378ADD;background:#f0f7ff}
+.set-item.active{border-color:#378ADD;background:#EBF5FF}
+.set-num{font-size:22px;font-weight:700;color:#378ADD}
+.set-label{font-size:12px;color:#666;margin-top:2px;font-weight:600}.set-desc{font-size:11px;color:#7a7a7a;line-height:1.45;margin-top:6px}.resume-box{background:#fff7e6;border:1px solid #ffd591;color:#8a5a00;border-radius:10px;padding:.9rem 1rem;margin:1rem 0;text-align:left;font-size:13px;line-height:1.6}
+.rules-box{background:#f9f9f9;border-radius:10px;padding:1rem;margin:1rem 0;text-align:left}
+.rules-box li{font-size:13px;color:#555;padding:3px 0 3px 1rem;position:relative}
+.rules-box li::before{content:"·";position:absolute;left:0;color:#378ADD;font-weight:700}
+/* Result */
+.result-wrap{text-align:center}
+.score-big{font-size:54px;font-weight:700;letter-spacing:-.03em;margin:1rem 0}
+.score-big.pass{color:#2e7d32}
+.score-big.fail{color:#c62828}
+.verdict{display:inline-block;padding:6px 20px;border-radius:8px;font-size:14px;font-weight:600;margin-bottom:1rem}
+.v-pass{background:#e8f5e9;color:#2e7d32}
+.v-fail{background:#fce4e4;color:#c62828}
+.stat-row{display:flex;gap:10px;justify-content:center;margin:1rem 0;flex-wrap:wrap}
+.stat-box{background:#f9f9f9;border-radius:10px;padding:.8rem 1.2rem;min-width:100px;text-align:center}
+.stat-n{font-size:24px;font-weight:700}
+.stat-l{font-size:12px;color:#777;margin-top:2px}
+.review-area{margin-top:1.5rem}
+.rv-q{border:1px solid #e0e0e0;border-radius:12px;padding:1.1rem;margin-bottom:.8rem;background:#fff}
+.rv-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem}
+.rv-status{font-size:12px;font-weight:600}
+.correct-tag{color:#2e7d32}
+.wrong-tag{color:#c62828}
+.skip-tag{color:#888}
+hr{border:none;border-top:1px solid #eee;margin:1rem 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- START SCREEN -->
+<div id="startScreen" class="screen on">
+<div class="card">
+<div class="start-wrap">
+<div class="logo">Digital Leaders Coaching</div>
+<h1 class="start-title">Kiểm tra nhận thức chương trình</h1>
+<p class="start-sub">Mỗi bộ đề sẽ rút ngẫu nhiên 40 câu từ ngân hàng câu hỏi mở rộng. Bạn có thể chọn đúng nhóm nội dung hoặc để hệ thống rút ngẫu nhiên liên bộ.</p>
+<div class="set-grid" id="setGrid">
+<div class="set-item active" data-set="0" onclick="pickSet(0)">
+  <div class="set-num">🎲</div><div class="set-label">Ngẫu nhiên</div><div class="set-desc">Rút 40 câu liên bộ từ ngân hàng lớn hơn</div>
+</div>
+<div class="set-item" data-set="1" onclick="pickSet(1)">
+  <div class="set-num">1</div><div class="set-label">Bộ đề 1</div><div class="set-desc">Tổng quan chương trình, vai trò cơ bản, phương pháp huấn luyện</div>
+</div>
+<div class="set-item" data-set="2" onclick="pickSet(2)">
+  <div class="set-num">2</div><div class="set-label">Bộ đề 2</div><div class="set-desc">Quy trình vận hành, thời hạn thực hiện, thủ tục chi tiết</div>
+</div>
+<div class="set-item" data-set="3" onclick="pickSet(3)">
+  <div class="set-num">3</div><div class="set-label">Bộ đề 3</div><div class="set-desc">Vai trò, nghĩa vụ, quyền hạn từng vị trí trong chương trình</div>
+</div>
+<div class="set-item" data-set="4" onclick="pickSet(4)">
+  <div class="set-num">4</div><div class="set-label">Bộ đề 4</div><div class="set-desc">Truyền thông, sự kiện ngoại khóa, cộng đồng LDS</div>
+</div>
+<div class="set-item" data-set="5" onclick="pickSet(5)">
+  <div class="set-num">5</div><div class="set-label">Bộ đề 5</div><div class="set-desc">Hỗn hợp nâng cao, tình huống phức tạp, bí quyết và triết lý chương trình</div>
+</div>
+</div>
+<div id="resumeBox" class="resume-box" style="display:none"></div><ul class="rules-box">
+<li>Thời gian làm bài: <strong>40 phút</strong></li>
+<li>Có thể làm lại nhiều lần để luyện tập</li>
+<li>Có thể rà soát lại toàn bộ câu hỏi trước khi nộp</li>
+<li>Kết quả hiển thị ngay sau khi nộp bài</li>
+<li>Điểm đạt: <strong>≥ 90%</strong> (từ 36/40 câu đúng)</li>
+</ul>
+<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:.5rem"><button class="btn btn-primary" onclick="startQuiz()" style="font-size:15px;padding:13px 34px">Tiếp tục / Bắt đầu →</button><button class="btn" onclick="startFreshQuiz()" style="font-size:15px;padding:13px 28px">Tạo đề luyện tập mới</button></div>
+</div>
+</div>
+</div>
+
+<!-- QUIZ SCREEN -->
+<div id="quizScreen" class="screen">
+<div class="header">
+<div>
+<div class="prog-text" id="progText">Câu 1 / 40</div>
+<div class="prog-sub" id="progSub">Đã trả lời: 0 câu</div>
+</div>
+<div class="timer" id="timer">40:00</div>
+</div>
+<div class="pb"><div class="pb-fill" id="pbFill" style="width:2.5%"></div></div>
+<div class="q-nav" id="qNav"></div>
+<div id="qWrap"></div>
+<div class="nav-btns">
+<button class="btn" id="prevBtn" onclick="prevQ()" style="display:none">← Trước</button>
+<button class="btn" id="nextBtn" onclick="nextQ()">Tiếp theo →</button>
+<button class="btn btn-primary" id="submitBtn" onclick="confirmSubmit()" style="display:none">Nộp bài</button>
+</div>
+</div>
+
+<!-- CONFIRM SCREEN -->
+<div id="confirmScreen" class="screen">
+<div class="card" style="text-align:center;padding:2rem">
+<h2 style="font-size:20px;font-weight:600;margin-bottom:1rem">Xác nhận nộp bài?</h2>
+<div id="confirmMsg" style="color:#555;font-size:14px;line-height:1.8;margin-bottom:1.5rem"></div>
+<div style="display:flex;gap:10px;justify-content:center">
+<button class="btn" onclick="backToQuiz()">← Quay lại rà soát</button>
+<button class="btn btn-danger" onclick="doSubmit()">Xác nhận nộp bài</button>
+</div>
+</div>
+</div>
+
+<!-- RESULT SCREEN -->
+<div id="resultScreen" class="screen">
+<div class="card">
+<div class="result-wrap">
+<div style="font-size:13px;color:#888;font-weight:500;letter-spacing:.06em;text-transform:uppercase">Kết quả bài kiểm tra</div>
+<div class="score-big" id="scoreBig"></div>
+<div class="verdict" id="verdict"></div><div id="resultMeta" style="font-size:13px;color:#666;margin-bottom:.6rem"></div>
+<div class="stat-row">
+<div class="stat-box"><div class="stat-n" style="color:#2e7d32" id="rC"></div><div class="stat-l">Đúng</div></div>
+<div class="stat-box"><div class="stat-n" style="color:#c62828" id="rW"></div><div class="stat-l">Sai</div></div>
+<div class="stat-box"><div class="stat-n" style="color:#888" id="rS"></div><div class="stat-l">Bỏ qua</div></div>
+<div class="stat-box"><div class="stat-n" id="rSet" style="color:#378ADD"></div><div class="stat-l">Bộ đề</div></div>
+</div>
+<div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:.75rem"><button class="btn btn-primary" onclick="showReview()" id="reviewBtn">Xem đáp án chi tiết</button><button class="btn" onclick="restartPractice()">Làm bộ đề mới</button></div>
+</div>
+</div>
+<div class="review-area" id="reviewArea" style="display:none"></div>
+</div>
+
+</div><!-- end wrap -->
+
+<script>
+// ============================================================
+// QUESTION BANK – 200 questions across 5 sets × 40 questions
+// ============================================================
+const SETS = [null]; // index 0 = random, sets start at 1
+
+const SET_META={
+  1:{name:'Bộ đề 1',topic:'Tổng quan chương trình, vai trò cơ bản, phương pháp huấn luyện'},
+  2:{name:'Bộ đề 2',topic:'Quy trình vận hành, thời hạn thực hiện, thủ tục chi tiết'},
+  3:{name:'Bộ đề 3',topic:'Vai trò, nghĩa vụ, quyền hạn từng vị trí trong chương trình'},
+  4:{name:'Bộ đề 4',topic:'Truyền thông, sự kiện ngoại khóa, cộng đồng LDS'},
+  5:{name:'Bộ đề 5',topic:'Hỗn hợp nâng cao, tình huống phức tạp, bí quyết và triết lý chương trình'}
+};
+
+// --- UTILITY ---
+function encAnswer(a){return ((a+3)*7).toString(36)}
+function decAnswer(k){return Math.round(parseInt(k,36)/7-3)}
+function ans(q){return decAnswer(q.k)}
+function s(t,q,o,a){return{t,q,o,k:encAnswer(a)}}
+const LY="Lý thuyết", TH="Tình huống";
+function inferDifficulty(q,setId,index){
+  const text=(q.q||'').toLowerCase();
+  if(q.t===TH){
+    if(/xung đột|mâu thuẫn|bế tắc|bi quan|không cải thiện|trao đổi riêng|không thỏa đáng|giải trình|gây chia rẽ/.test(text)) return 'H';
+    return setId>=4 ? 'H' : 'M';
+  }
+  if(/bao nhiêu|là gì|ngày nào|tên .* là gì|ai là|thuộc loại hình nào|viết tắt|điều kiện để/.test(text)) return 'E';
+  if(setId===5 || /quyết định cuối cùng|phương pháp|bí quyết|mục tiêu|xung đột|đánh giá|thực thi/.test(text)) return 'H';
+  return 'M';
+}
+function diffLabel(d){ return d==='E'?'Easy':d==='H'?'Hard':'Medium'; }
+function diffBadgeClass(d){ return d==='E'?'b-df-e':d==='H'?'b-df-h':'b-df-m'; }
+function cloneQuestion(q){ return JSON.parse(JSON.stringify(q)); }
+function shuffleOptions(question){
+  const pairs=question.o.map((opt,idx)=>({opt,idx}));
+  const shuffled=shuffle(pairs);
+  const correctIndex=shuffled.findIndex(x=>x.idx===ans(question));
+  question.o=shuffled.map(x=>x.opt);
+  question.k=encAnswer(correctIndex);
+  return question;
+}
+function prepareBank(setId, bank){
+  return bank.map((q,idx)=>{
+    const qq=cloneQuestion(q);
+    qq.setId=setId;
+    qq.topic=SET_META[setId]?.topic || 'Liên bộ';
+    qq.d=qq.d || inferDifficulty(qq,setId,idx);
+    enrichQuestionMeta(qq);
+    return qq;
+  });
+}
+
+function inferChapter(q){
+  const t=(q.q||'').toLowerCase();
+  if(/truyền thông|hashtag|facebook|linkedin|website|bài viết|check-in|hình ảnh|bài thu hoạch|reflection|ấn phẩm|đăng bài/.test(t)) return '2.7 Hoạt động truyền thông';
+  if(/cộng đồng|lds|27\/02|câu lạc bộ|chủ tịch cộng đồng|xuống núi/.test(t)) return '2.8 Cộng đồng Lãnh Đạo Số';
+  if(/retreat day|orientation|team building|ngoại khóa|gala dinner|trưởng btc|sự kiện/.test(t)) return '2.3 Các hoạt động ngoại khóa';
+  if(/golden board|standee|thủ quỹ|ban cán sự|thu chi|công cụ|dụng cụ|quỹ lớp|quỹ lãnh đạo số/.test(t)) return '2.4 Hoạt động vận hành';
+  if(/kênh hỏi đáp|gọi điện|gặp trực tiếp|4 giờ|file hỏi - đáp|quyền đòi hỏi|tương tác với các kênh/.test(t)) return '2.6 Quyền đòi hỏi / Kênh hỏi đáp';
+  if(/xung đột|tranh luận|team |nhóm trưởng|mục tiêu|kế hoạch hành động|đánh giá kết quả|tình huống thực tiễn|thuyết trình|bọc lót|đảo nhóm|luật chơi|chế tài/.test(t)) return '2.5 Hoạt động huấn luyện';
+  if(/coach|huấn luyện viên|hlv|tiger coach|assistant|học viên|ban vận hành|ban truyền thông|ban tuyển sinh|ban tuyển dụng|ban pháp chế|lớp trưởng|lớp phó|thư ký/.test(t)) return '2.2 Vai trò / Cơ cấu / Nghĩa vụ';
+  return '2.1 Tổng quan chương trình / Phương pháp / Bí quyết';
+}
+function inferRoles(q){
+  const text=(q.q||'').toLowerCase();
+  const mapping=[
+    ['Coach/HLV', /coach|hlv|huấn luyện viên/],
+    ['Tiger Coach', /tiger coach/],
+    ['Assistant', /assistant|trợ lý/],
+    ['Học viên/Hạt giống', /học viên|hạt giống|thành viên/],
+    ['Nhóm Trưởng', /nhóm trưởng/],
+    ['Lớp Trưởng/Lớp Phó', /lớp trưởng|lớp phó/],
+    ['Ban Vận Hành', /ban vận hành|bvh/],
+    ['Ban Truyền Thông', /ban truyền thông|btt/],
+    ['Ban Tuyển Sinh/Tuyển Dụng', /ban tuyển sinh|ban tuyển dụng|bts|btd/],
+    ['Ban Cán Sự', /ban cán sự/],
+    ['Cộng đồng LDS', /cộng đồng lãnh đạo số|lds/],
+    ['Ban Huấn Luyện', /ban huấn luyện|bhl/],
+  ];
+  const res=mapping.filter(([_,pat])=>pat.test(text)).map(([label])=>label);
+  if(!res.length && (/team|nhóm /.test(text))) res.push('Học viên/Hạt giống');
+  return res.length?res:['Chung'];
+}
+function inferScenarioKeywords(q){
+  const text=(q.q||'').toLowerCase();
+  const pats=[
+    ['xung đột team', /xung đột|mâu thuẫn|công kích cá nhân/],
+    ['escalation', /leo thang|báo ngay|phản ánh/],
+    ['kênh hỏi đáp', /kênh hỏi đáp|gọi điện|gặp trực tiếp|4 giờ|file hỏi/],
+    ['coach', /coach|hlv/],
+    ['tiger coach', /tiger coach/],
+    ['assistant', /assistant|trợ lý/],
+    ['truyền thông', /truyền thông|hashtag|bài viết|check-in/],
+    ['team building', /team building/],
+    ['retreat day', /retreat day/],
+    ['orientation', /orientation/],
+    ['golden board', /golden board/],
+    ['offboard', /offboard/],
+    ['cam kết', /cam kết/],
+    ['tài liệu ngoài', /tài liệu ngoài|tài liệu được duyệt/],
+    ['dữ liệu giả', /dữ liệu giả/],
+    ['tranh luận', /tranh luận/],
+    ['đánh giá kết quả', /đánh giá|dưới mục tiêu/],
+    ['chi phí/quỹ', /quỹ|chi phí|thu chi/],
+    ['vai trò/quyền hạn', /quyền|nghĩa vụ|vai trò|trách nhiệm/],
+    ['ngoại khóa', /ngoại khóa|sự kiện/],
+  ];
+  return pats.filter(([_,pat])=>pat.test(text)).map(([label])=>label).slice(0,6);
+}
+function enrichQuestionMeta(q){
+  q.chapter=q.chapter || inferChapter(q);
+  q.roles=q.roles || inferRoles(q);
+  q.scenarioKeywords=q.scenarioKeywords || inferScenarioKeywords(q);
+  return q;
+}
+
+
+// ============================================================
+// SET 1 – Tổng quan, vai trò cơ bản, phương pháp
+// ============================================================
+SETS[1]=[
+s(LY,"Tên tiếng Anh chính thức của chương trình 'Hạt Giống Lãnh Đạo Số' là gì?",["Digital Leaders Coaching","Institute of Potential Digital Leaders","CIO Coaching","Digital Seed Leadership Program"],1),
+s(LY,"Chương trình 'Hạt Giống Lãnh Đạo Số' có bao nhiêu mục tiêu chính?",["2","3","4","5"],2),
+s(LY,"BHL trong chương trình bao gồm những thành phần nào?",["Chỉ HLV và Tiger Coach","HLV, Tiger Coach và Assistant","HLV và Học Viên","Tất cả các vai trò tham gia"],1),
+s(LY,"Phạm vi chương trình kéo dài từ khi nào đến khi nào?",["Từ Retreat Day đến Xuống Núi mùa đó","Từ tuyển sinh đến tốt nghiệp","Từ Xuống Núi mùa trước đến hết Xuống Núi mùa tiếp theo","Từ buổi huấn luyện đầu tiên đến buổi cuối cùng"],2),
+s(LY,"Điều kiện để trở thành Tiger Coach là gì?",["Chỉ cần hoàn thành chương trình HGLĐS","Tham gia ít nhất 1 mùa làm Assistant và được BHL phê duyệt","Tham gia ít nhất 2 mùa làm Assistant","Là nhân viên IT cấp cao và đăng ký"],1),
+s(LY,"Ngày truyền thống của chương trình là ngày nào?",["01/01","27/02","30/04","15/08"],1),
+s(LY,"Chương trình thuộc loại hình nào?",["Phi lợi nhuận (Non-profit)","Có thu phí từ học viên","Được doanh nghiệp tài trợ toàn bộ","Hợp tác công tư"],0),
+s(LY,"'Golden Board' là gì?",["Bảng xếp hạng thành tích các nhóm","Bảng đánh giá kết quả cuối chủ đề","Bảng ghi tất cả các vi phạm quy định của chương trình và của Team","Bảng tổng hợp điểm số hàng tuần"],2),
+s(LY,"Chương trình có bao nhiêu hashtag chính thức?",["5","6","7","8"],3),
+s(LY,"Điều kiện để gia nhập Cộng đồng Lãnh Đạo Số là gì?",["Đăng ký và đóng phí thành viên","Hoàn thành chương trình và được BHL đồng ý Xuống Núi","Tham gia phỏng vấn và được chấp thuận","Làm việc trong lĩnh vực CNTT tối thiểu 3 năm"],1),
+s(LY,"Lớp Trưởng và Lớp Phó được bầu vào thời điểm nào?",["Trước Retreat Day","Ngay tại Retreat Day","Sau buổi huấn luyện chủ đề đầu tiên","Sau Orientation"],1),
+s(LY,"Theo v2.0, ai chịu trách nhiệm đảm bảo quy định, quy tắc được thực thi?",["Ban Pháp Chế","Ban Huấn Luyện","Ban Vận Hành","Lớp Trưởng"],2),
+s(LY,"Chi phí vận hành huấn luyện do ai chịu trách nhiệm?",["Ban Huấn Luyện","Cộng đồng Lãnh Đạo Số","Học viên tự đóng góp và tự quản lý","Nhà tài trợ"],2),
+s(LY,"Mục tiêu và kế hoạch cho chủ đề cần thiết lập trước buổi huấn luyện đầu tiên bao lâu?",["3 ngày","5 ngày","1 tuần","2 tuần"],2),
+s(LY,"Assistant bắt buộc phải đặt tối thiểu bao nhiêu câu hỏi trong mỗi buổi huấn luyện chính thức?",["3 câu","5 câu","7 câu","10 câu"],1),
+s(LY,"Kênh hỏi đáp ưu tiên số 1 là gì?",["Gặp trực tiếp BHL","Gọi điện thoại","Công cụ nhắn tin nhóm chính thức với BHL","Email"],2),
+s(LY,"Tiger Coach KHÔNG được phép làm gì?",["Đọc bài học viên và đưa ý kiến","Tham gia đánh giá kết quả chủ đề","Tự ý chia sẻ kinh nghiệm thực tiễn khi chưa có phép HLV","Báo cáo kết quả cho HLV"],2),
+s(LY,"Học viên phải nộp biên bản huấn luyện chậm nhất sau bao lâu?",["24 giờ","48 giờ","72 giờ","7 ngày"],1),
+s(LY,"Kết thúc mỗi chủ đề, mỗi học viên cần viết bao nhiêu bài thu hoạch?",["2 bài","1 bài","3 bài","Tùy BHL quy định"],1),
+s(LY,"Ban Tuyển Sinh hoàn thành nhiệm vụ sau sự kiện nào?",["Sau phỏng vấn","Sau công bố kết quả","Sau Retreat Day","Sau khi hạt ký NDA"],2),
+s(LY,"Ai mặc định là thành viên trong Ban Vận Hành?",["Chỉ các Coach","Lớp Trưởng và Lớp Phó","Tất cả học viên","Tiger Coach và Assistant"],1),
+s(LY,"Tiger Coach muốn rời BHL cần làm gì trước tiên?",["Thông báo trên nhóm chat","Tự thoát khỏi nhóm","Xin phép HLV chủ đề","Gửi email toàn thể BHL"],2),
+s(LY,"Ai phê duyệt Quy Định Hoạt Động Huấn Luyện?",["Trưởng Ban Vận Hành","Huấn Luyện Viên Trưởng","Ban Pháp Chế","Lớp Trưởng"],1),
+s(LY,"Hình ảnh buổi huấn luyện cần upload lên thư mục chậm nhất sau bao nhiêu giờ?",["24 giờ","48 giờ","72 giờ","7 ngày"],2),
+s(LY,"Trong buổi huấn luyện chính thức, thiết bị nào được phép mở?",["Tất cả laptop học viên","Chỉ laptop Nhóm Trưởng","Chỉ máy chiếu và máy BHL","Không ai được mở"],2),
+s(LY,"Mục đích chính của việc đảo nhóm sau mỗi chủ đề là gì?",["Cân bằng năng lực các nhóm","Mỗi thành viên làm việc với nhiều người khác nhất","BHL đánh giá dễ hơn","Yêu cầu bắt buộc từng HLV"],1),
+s(LY,"Ai quyết định cuối cùng khi cân nhắc cho học viên ra khỏi chương trình?",["Lớp Trưởng","Ban Vận Hành","Ban Huấn Luyện","Cộng đồng Lãnh Đạo Số"],2),
+s(LY,"Tài liệu nào là nền tảng chi phối mọi hoạt động của chương trình?",["Quy định hoạt động huấn luyện","Master Plan","Sổ Tay Huấn Luyện","Hướng dẫn hoạt động huấn luyện"],2),
+s(LY,"Hashtag nào KHÔNG thuộc danh sách chính thức?",["#DigitalLeadersCoaching","#LanhDaoSo","#CIOVietnam","#HatGiongSo"],3),
+s(LY,"Lớp Trưởng và Lớp Phó mùa trước mặc định đứng đầu tổ chức nào của mùa hiện tại?",["Ban Huấn Luyện","Ban Truyền Thông","Ban Tuyển Sinh","Ban Pháp Chế"],2),
+s(TH,"Nhóm không thống nhất được hướng giải quyết. Nhóm Trưởng cần làm gì TRƯỚC TIÊN?",["Báo ngay cho HLV","Áp dụng luật chơi và chế tài đã thiết lập","Bỏ phiếu đa số","Mỗi người tự làm theo hướng của mình"],1),
+s(TH,"Tiger Coach chia sẻ tài liệu ngoài danh sách được duyệt. Bạn nên làm gì?",["Sử dụng vì Tiger Coach có quyền","Từ chối và phản ánh cho HLV chủ đề","Hỏi Tiger Coach về nội dung","Tự quyết định có sử dụng không"],1),
+s(TH,"Thành viên liên tục vắng mặt không lý do. Nhóm Trưởng cần làm gì?",["Đợi thêm vài buổi","Họp nội bộ bàn bạc xử lý","Cập nhật ngay cho BHL chủ đề biết","Phân công lại công việc bình thường"],2),
+s(TH,"HLV chỉ định thành viên trả lời nhưng không giải được. Thành viên khác cần làm gì?",["Giữ im lặng","Chủ động hỗ trợ/bọc lót cho đồng đội","Yêu cầu BHL cho thêm thời gian","Để HLV tự xử lý"],1),
+s(TH,"Phát hiện Tiger Coach chia sẻ kinh nghiệm không có phép HLV. Bạn nên làm gì?",["Bỏ qua vì Tiger Coach muốn giúp","Phản ánh ngay cho BHL/HLV chủ đề","Thảo luận với học viên khác xem có phản ánh không","Tiếp nhận vì có thể hữu ích"],1),
+s(TH,"Học viên muốn dừng tham gia. Bước đầu tiên cần làm là gì?",["Thông báo trên nhóm chat lớp","Liên hệ trực tiếp HLV Trưởng để trao đổi","Báo Lớp Trưởng xử lý","Tự thoát các nhóm chat"],1),
+s(TH,"Sau phỏng vấn tuyển sinh, BTS gửi email kết quả cho ứng viên chậm nhất sau bao lâu?",["Ngay trong ngày phỏng vấn","Tối đa 1 ngày","Trong vòng 3 ngày","Trong vòng 7 ngày"],1),
+s(TH,"Assistant muốn chia sẻ thêm thông tin ngoài tài liệu được duyệt. Phải làm gì?",["Chia sẻ nếu thấy hữu ích","Hỏi ý kiến học viên trước","Được sự đồng ý của Tiger Coach hoặc HLV trước","Không chia sẻ trong bất kỳ trường hợp nào"],2),
+s(TH,"Học viên không hài lòng kết quả đánh giá của HLV. Cần làm gì?",["Phản hồi công khai trên nhóm chat","Phản hồi ngay cho Ban Huấn Luyện để được giải thích","Chấp nhận và không phản hồi","Khiếu nại lên Cộng đồng Lãnh Đạo Số"],1),
+s(TH,"Trong giai đoạn tuyển sinh, thành viên BHL vi phạm quy định. Tiền phạt nộp vào đâu?",["Quỹ lớp học","Quỹ Lãnh Đạo Số","Quỹ Ban Vận Hành","Chờ thành lập lớp mới xác định"],1),
+
+s(LY,"Theo Sổ Tay, ai sở hữu nội dung và phương pháp huấn luyện của chương trình?",["Ban Vận Hành","Ban Huấn Luyện","Cộng đồng LDS","Ban Truyền Thông"],1),
+s(LY,"Một trong các mục đích của Sổ Tay Huấn Luyện là gì?",["Thay thế hoàn toàn đề cương từng chủ đề","Giúp học viên hình dung rõ các kênh giao tiếp chính thống của chương trình","Quy định chi tiết lương thưởng cho BHL","Làm tài liệu marketing tuyển dụng"],1),
+s(LY,"Chương trình bắt đầu tính từ mốc nào của mùa trước?",["Ngày phỏng vấn đầu tiên","Ngày Retreat Day mùa trước","Thời điểm kết thúc Lễ Xuống Núi mùa trước","Ngày công bố tuyển sinh"],2),
+s(LY,"Một tiêu chí chọn lựa thành viên tham gia huấn luyện là gì?",["Có bằng cấp quản lý","Có kế hoạch cá nhân rõ ràng để thực hiện mục tiêu","Đang giữ chức danh cấp cao","Có tối thiểu 10 năm kinh nghiệm"],1),
+s(LY,"Trong phương pháp huấn luyện, ở phần Mục tiêu cần xác định thêm điều gì?",["Địa điểm tổ chức","Các kết quả đầu ra và phương pháp đánh giá","Danh sách khách mời","Ngân sách nhóm"],1),
+s(LY,"Trong phần bí quyết học tập, dữ liệu giả được xem là gì?",["Cách tiết kiệm thời gian","Một kỹ thuật thuyết phục","Cái bẫy re-work của chính học viên","Không ảnh hưởng nếu logic tốt"],2),
+s(LY,"Quan điểm của chương trình khi học viên phải ra khỏi chương trình là gì?",["Tạm dừng toàn bộ mùa huấn luyện","Chỉ tiếp tục nếu còn từ 5 học viên","Chương trình vẫn tiếp tục kể cả khi chỉ còn một học viên","Chuyển sang chế độ học online"],2),
+s(TH,"Một học viên muốn dùng Sổ Tay như tài liệu nền nhưng bỏ qua đề cương và từ điển năng lực của chủ đề. Cách hiểu nào đúng?",["Đúng vì Sổ Tay là đủ","Chưa đúng vì vẫn phải bám sát đề cương và Từ Điển Năng Lực của chủ đề","Đúng nếu nhóm trưởng đồng ý","Chỉ cần hỏi Tiger Coach là được"],1),
+s(TH,"Nhóm đang xác định mục tiêu chủ đề nhưng chỉ nói chung chung, không rõ đầu ra. Theo phương pháp huấn luyện, cần bổ sung gì?",["Chỉ cần chọn thêm nhiều tài liệu","Cần xác định rõ kết quả đầu ra và phương pháp đánh giá","Chỉ cần phân công ai thuyết trình","Chỉ cần hỏi HLV sau"],1),
+s(TH,"Một thành viên cho rằng chỉ cần giỏi chuyên môn là đủ để thành công trong chương trình. Theo Sổ Tay, điều gì còn rất quan trọng?",["Được nhiều người biết đến","Toàn Team có chung động lực và sự yêu quý lẫn nhau","Có nhiều thiết bị hỗ trợ","Có bài viết truyền thông hay"],1),
+
+s(LY,"Một trong các mục tiêu chính của chương trình là gì?",["Tạo nền tảng chia sẻ kiến thức kinh tế số trong cộng đồng","Tuyển dụng nhân sự cho BHL","Cấp chứng chỉ quốc tế bắt buộc","Triển khai phần mềm cho doanh nghiệp"],0),
+s(LY,"Trong phần bí quyết, điều gì giúp học viên càng dễ đạt kết quả cao?",["Đầu tư nhiều nguồn lực vào việc học và hành động","Chỉ tập trung vào bài thi lý thuyết","Chỉ học từ HLV","Hạn chế tranh luận để tránh xung đột"],0),
+s(LY,"Học viên cần tự học theo nguồn nào trước tiên?",["Tài liệu HLV cung cấp","Bài viết mạng xã hội","Tài liệu từ học viên mùa trước","Bất kỳ nguồn nào miễn nhanh"],0),
+s(LY,"Trong phần bí quyết, năng lực nào được nhấn mạnh là năng lực lõi của nhà quản lý?",["Problem solving","Thiết kế đồ họa","Kỹ năng bán hàng","Kỹ năng viết code"],0),
+s(TH,"Một học viên nói: 'Tôi chỉ cần qua môn, không cần thật sự hiểu'. Điều này lệch với tinh thần nào của chương trình?",["Tinh thần phi lợi nhuận","Tinh thần huấn luyện để chuyển hóa và đạt mục tiêu thực sự","Tinh thần tự đóng chi phí vận hành","Tinh thần check-in truyền thông"],1),
+s(TH,"Nhóm muốn bỏ qua bước xác định phương pháp đánh giá vì cho rằng chỉ cần hoàn thành đầu ra. Theo phương pháp huấn luyện, nên làm gì?",["Bỏ qua vì không quan trọng","Bổ sung vì mục tiêu cần gắn với đầu ra và cách đánh giá","Để cuối chủ đề bổ sung","Nhờ Assistant quyết định"],1),
+s(TH,"Một thành viên rất giỏi nhưng luôn học một mình, không chia sẻ cho Team. Điều này trái với bí quyết nào?",["Tôn trọng và giúp Team cùng thành công","Chỉ cần giữ cam kết cá nhân là đủ","Không ảnh hưởng nếu cá nhân mạnh","Chỉ nhóm trưởng mới cần chia sẻ"],0),
+s(TH,"Nhóm lấy dữ liệu ước đoán để thuyết trình cho nhanh. Theo Sổ Tay, rủi ro lớn nhất là gì?",["Bị thiếu hình ảnh trình bày","Rơi vào bẫy re-work vì dữ liệu giả","Bị trừ điểm truyền thông","Không có rủi ro nếu thuyết trình tốt"],1),
+s(TH,"Học viên gặp khó nhưng ngại hỏi BHL vì sợ bị đánh giá yếu. Theo phần 'Xây dựng Tâm và Thế', cách nghĩ phù hợp hơn là gì?",["Cứ im lặng tự chịu","Học viên phải chủ động khai thác nguồn lực của BHL để đạt mục tiêu","Chỉ hỏi khi gần fail","Chỉ nhóm trưởng được hỏi"],1),
+s(TH,"Team chỉ chăm chăm làm slide đẹp mà chưa rõ tình huống thực tiễn và đầu ra. Đây là dấu hiệu gì?",["Tập trung đúng trọng tâm","Lệch khỏi tinh thần lấy mục tiêu và vấn đề thực tế làm gốc","Chỉ là khác phong cách làm việc","Không ảnh hưởng nếu trình bày hay"],1),
+];
+
+// ============================================================
+// SET 2 – Quy trình, thời hạn, vận hành chi tiết
+// ============================================================
+SETS[2]=[
+s(LY,"Kế hoạch tổ chức sự kiện ngoại khóa phải được ai phê duyệt trước khi triển khai?",["Lớp Trưởng","Ban Tổ Chức","BVH, BTT và BHL","Cộng đồng Lãnh Đạo Số"],2),
+s(LY,"BHL Chủ Đề cần phân công vai trò và chốt danh sách trước buổi huấn luyện đầu tiên bao lâu?",["7 ngày","14 ngày","21 ngày","28 ngày"],3),
+s(LY,"Mỗi nhóm cần đặt tối thiểu bao nhiêu câu hỏi cho BHL mỗi tuần huấn luyện?",["3 câu","5 câu","7 câu","10 câu"],1),
+s(LY,"Thi lý thuyết đầu vào được tổ chức vào thời điểm nào?",["Trước Retreat Day","Trước buổi huấn luyện đầu tiên của chủ đề","Sau buổi huấn luyện đầu tiên","Cuối mỗi chủ đề"],1),
+s(LY,"Nếu học viên thi lý thuyết lần 1 không đạt, điều kiện để thi lần 2 là gì?",["Tự ôn luyện lại","Ít nhất 75% lớp cam kết hỗ trợ","Được HLV Trưởng cho phép","Không có thi lần 2"],1),
+s(LY,"Trưởng BTC mỗi sự kiện ngoại khóa có ràng buộc gì?",["Phải là Lớp Trưởng hoặc Lớp Phó","Không được là người đã làm Trưởng BTC sự kiện trước","Phải là thành viên BVH","Phải là người nhiều kinh nghiệm nhất"],1),
+s(LY,"Trong giai đoạn diễn ra sự kiện, hình ảnh phải được cập nhật lên thư mục cứ bao lâu một lần?",["1 tiếng","3 tiếng","5 tiếng","8 tiếng"],2),
+s(LY,"Sau khi kết thúc sự kiện ngoại khóa, thông tin tài chính phải công bố chậm nhất sau bao nhiêu ngày?",["1 ngày","3 ngày","5 ngày","7 ngày"],1),
+s(LY,"Sau khi kết thúc sự kiện, tài liệu tổ chức phải được 'đóng gói' và nộp chậm nhất sau bao nhiêu ngày?",["3 ngày","5 ngày","7 ngày","14 ngày"],2),
+s(LY,"Mẫu câu hỏi của nhóm phải được nộp trước buổi huấn luyện bao lâu?",["6 giờ","12 giờ","24 giờ","48 giờ"],2),
+s(LY,"Các nhóm nộp tài liệu chuẩn bị cho buổi huấn luyện trước bao lâu?",["6 giờ","12 giờ","24 giờ","48 giờ"],1),
+s(LY,"Thông báo về thời gian và địa điểm buổi huấn luyện phải gửi trước bao nhiêu ngày?",["2 ngày","3 ngày","5 ngày","7 ngày"],2),
+s(LY,"Nhận xét/đánh giá của TC/A về hạt phải nộp sau buổi huấn luyện chậm nhất sau bao lâu?",["12 giờ","24 giờ","48 giờ","72 giờ"],2),
+s(LY,"Điểm tổng kết cuối chủ đề phải gửi cho học viên chậm nhất sau bao nhiêu ngày?",["3 ngày","5 ngày","7 ngày","14 ngày"],2),
+s(LY,"'Uống trà' là hoạt động gì?",["Giải lao sau buổi huấn luyện","Trao đổi riêng giữa Coach và từng hạt sau kết thúc chủ đề","Buổi giao lưu toàn thể BHL","Hoạt động team building"],1),
+s(LY,"Hoạt động 'uống trà' bắt buộc với đối tượng nào?",["Hạt có kết quả dưới mức yêu cầu","Tất cả hạt giống – bắt buộc","Chỉ hạt tự nguyện","Không bắt buộc ai"],1),
+s(LY,"BHL chủ đề tổ chức họp kick-off trước buổi huấn luyện đầu tiên bao lâu?",["7 ngày","14 ngày","21 ngày","28 ngày"],2),
+s(LY,"Tài liệu huấn luyện của chủ đề phải upload lên thư mục trước buổi đầu bao lâu?",["7 ngày","14 ngày","21 ngày","28 ngày"],1),
+s(LY,"TC/A gửi nhận xét về nội dung tài liệu cho Coach trước buổi huấn luyện bao lâu?",["30 phút","1 giờ","2 giờ","24 giờ"],2),
+s(LY,"Họp review rút kinh nghiệm của BHL phải hoàn thành sau buổi đầu chậm nhất bao lâu?",["24 giờ","48 giờ","72 giờ","7 ngày"],1),
+s(LY,"Thành viên BHL muốn thông báo kết quả tuyển sinh đến ứng viên không đạt phỏng vấn chậm nhất sau bao lâu?",["Ngay trong ngày","Tối đa 1 ngày","Trong vòng 3 ngày","Trong vòng 7 ngày"],1),
+s(LY,"Sau sự kiện ngoại khóa, bài viết cảm nhận cá nhân phải đăng chậm nhất sau bao nhiêu ngày?",["1 ngày","3 ngày","5 ngày","7 ngày"],1),
+s(LY,"Bài post truyền thông kết quả phỏng vấn trên các kênh chính thức phải đăng chậm nhất sau bao nhiêu ngày kể từ khi phỏng vấn kết thúc?",["2 ngày","5 ngày","7 ngày","14 ngày"],2),
+s(LY,"Hạt giống phải kết bạn social với Coach và đồng đội chậm nhất bao nhiêu ngày sau kick-off?",["1 ngày","2 ngày","3 ngày","7 ngày"],1),
+s(LY,"Đánh giá 360 giữa các hạt phải hoàn thành sau buổi huấn luyện cuối chủ đề chậm nhất sau bao lâu?",["24 giờ","48 giờ","72 giờ","7 ngày"],2),
+s(LY,"Chia nhóm học viên cho mỗi chủ đề phải hoàn thành trước buổi đầu tiên bao lâu?",["5 ngày","7 ngày","10 ngày","14 ngày"],2),
+s(LY,"Tạo nhóm chat cho chủ đề phải hoàn thành trước buổi đầu tiên bao lâu?",["5 ngày","7 ngày","10 ngày","14 ngày"],3),
+s(LY,"Từ điển năng lực và đề cương phải sẵn sàng trước buổi đầu tiên bao lâu?",["3 ngày","5 ngày","7 ngày","14 ngày"],2),
+s(LY,"Ban Tuyển Sinh thành lập Group Chat BTS trong bao lâu sau lễ Xuống Núi mùa trước?",["Ngay sau khi Xuống Núi","Trong 3 ngày","Trong 7 ngày","Trong 14 ngày"],2),
+s(LY,"Onboard kênh liên lạc cho hạt giống mới phải hoàn thành chậm nhất sau bao nhiêu ngày kể từ khi có kết quả phỏng vấn?",["1 ngày","2 ngày","3 ngày","5 ngày"],2),
+s(TH,"Nhóm đặt câu hỏi qua nhóm chat nhưng sau 4 giờ chưa có phản hồi từ BHL. Phải làm gì tiếp?",["Đợi thêm 24 giờ","Gọi điện hoặc tương tác qua kênh khác","Tự quyết định giải pháp","Báo vi phạm lên Ban Vận Hành"],1),
+s(TH,"Nhóm bạn nộp tài liệu sau hạn quy định 2 giờ. Điều gì có thể xảy ra?",["Được tha thứ nếu có lý do chính đáng","Bị ghi nhận vào Golden Board","Phải làm lại toàn bộ tài liệu","Nhóm trưởng bị loại khỏi vai trò"],1),
+s(TH,"Sự kiện ngoại khóa sắp diễn ra nhưng kế hoạch chưa được BVH/BHL phê duyệt. Nên làm gì?",["Tiến hành theo kế hoạch đã chuẩn bị","Hoãn sự kiện cho đến khi có phê duyệt","Liên hệ ngay BVH, BTT để trình bày và xin phê duyệt","Tự quyết định vì sự kiện cần diễn ra đúng hạn"],2),
+s(TH,"Bạn là Trưởng BTC Retreat Day và phát hiện kế hoạch chưa đánh giá rủi ro y tế. Cần làm gì?",["Bỏ qua vì không có rủi ro rõ ràng","Bổ sung dụng cụ y tế phù hợp với môi trường hoạt động","Hỏi BVH có cần thiết không","Chờ đến ngày sự kiện mới xử lý"],1),
+s(TH,"Học viên hỏi TC một câu hỏi chuyên môn nhưng TC trả lời mâu thuẫn với tài liệu. Học viên nên làm gì?",["Tin tưởng TC vì họ có kinh nghiệm hơn","Phản ánh ngay cho BHL/HLV chủ đề biết","Tự tìm hiểu thêm trên internet","Không quan tâm và tiếp tục làm theo nhóm"],1),
+s(TH,"Cuộc tranh luận trong nhóm đang trở nên cá nhân và có dấu hiệu xung đột lớn. Nhóm Trưởng nên làm gì?",["Để mọi người tự giải quyết","Kết thúc buổi thảo luận ngay lập tức","Tập trung nhóm vào mục tiêu chung và áp dụng kỹ thuật leadership","Báo ngay cho HLV dù mới chỉ mới bắt đầu"],2),
+s(TH,"Bạn phát hiện một học viên mùa trước đang 'xúi giục' nhóm bạn làm trái phương pháp huấn luyện. Nên làm gì?",["Lắng nghe vì họ có kinh nghiệm mùa trước","Báo ngay cho Ban Huấn Luyện","Thảo luận nội bộ nhóm","Từ chối khéo léo và tiếp tục"],1),
+s(TH,"Sau sự kiện Team Building, khảo sát chất lượng chưa được gửi sau 5 ngày. Ai chịu trách nhiệm?",["BTT","BHL","Trưởng BTC.VH","Lớp Trưởng"],2),
+s(TH,"Hạt giống nhận được thông báo offboard. Hạt cần làm gì ngay sau khi nhận thông báo?",["Chờ BVH xử lý","Thông báo tạm biệt và thoát tất cả nhóm chat, email chương trình","Chỉ thoát nhóm chat chính","Đợi cho đến ngày cuối tháng"],1),
+s(TH,"Nhóm bạn phát hiện bài nộp của mình có lỗi SAU khi đã nộp lên thư mục. Cần làm gì?",["Im lặng và hy vọng BHL không nhận ra","Kịp thời báo cho các bên liên quan và xin phép sửa","Tự sửa trên file đã nộp không báo ai","Nộp thêm file mới có đính chính"],1),
+
+s(LY,"Theo phần 'Cách thức hỏi', nếu đăng câu hỏi trên nhóm chat chủ đề mà sau 4 giờ chưa được trả lời thì cần làm gì?",["Chờ đến buổi học sau","Tương tác với các kênh khác nhau để tìm hỗ trợ","Xóa câu hỏi và hỏi lại sau","Chuyển sang hỏi nhóm khác"],1),
+s(LY,"Ai chịu trách nhiệm tổng hợp câu trả lời khi đặt câu hỏi qua kênh nhắn tin chính thức?",["Coach","Người hỏi","Lớp Trưởng","Assistant"],1),
+s(LY,"Mục tiêu và kế hoạch hành động của Team phải được ban hành trên tài nguyên chia sẻ trước buổi đầu tiên bao lâu?",["3 ngày","5 ngày","1 tuần","2 tuần"],2),
+s(LY,"Trong buổi huấn luyện, tất cả điện thoại cần ở trạng thái nào?",["Chỉ trưởng nhóm bật chuông","Chế độ yên lặng","Tắt nguồn hoàn toàn","Để rung"],1),
+s(LY,"Khi có việc gấp trong buổi huấn luyện và cần dùng laptop cá nhân, học viên phải làm gì?",["Mở máy tại chỗ miễn là không ồn","Thông báo BHL và mang máy tính ra ngoài làm việc","Nhờ nhóm trưởng xin phép sau","Tự xử lý, không cần báo"],1),
+s(LY,"Theo hoạt động vận hành, ai đảm bảo các buổi huấn luyện có standee của chương trình?",["Ban Truyền Thông","Ban cán sự/lớp được phân công công cụ dụng cụ","Chỉ BHL","Tiger Coach"],1),
+s(LY,"Hoạt động đánh giá kết quả chủ đề phải hoàn thành khi nào?",["Trước buổi đầu tiên","Ở buổi huấn luyện cuối của chủ đề","Sau Xuống Núi","Sau toàn mùa"],1),
+s(TH,"Nhóm đã đăng câu hỏi lên kênh chính thức nhưng một thành viên lại gọi riêng cho người quen trong BHL để xin đáp án nhanh. Cách làm chuẩn hơn là gì?",["Tiếp tục vì nhanh hơn","Giữ câu hỏi trên kênh chính thức để các Team khác cùng học, chỉ leo sang kênh khác khi cần","Xóa câu hỏi trên nhóm","Chỉ báo lớp trưởng"],1),
+s(TH,"Trong buổi huấn luyện, một học viên vừa nghe nhóm khác trình bày vừa lướt điện thoại. Điều này trái với yêu cầu nào?",["Không ảnh hưởng vì không phải nhóm mình","Trái với yêu cầu tập trung theo dõi và phản biện các Team khác","Chỉ trái nếu đang bị gọi tên","Chỉ áp dụng cho nhóm trưởng"],1),
+s(TH,"Team phát hiện kế hoạch hành động chưa có luật chơi và chế tài. Theo Sổ Tay, nên xử lý thế nào?",["Bỏ qua vì không bắt buộc","Bổ sung vì luật chơi và chế tài là một phần của kế hoạch hành động","Để cuối chủ đề bổ sung","Chờ BHL nhắc mới làm"],1),
+
+s(LY,"Trong phần cách thức tổ chức buổi huấn luyện, việc trình chiếu trực tiếp trên một máy tính duy nhất nhằm mục đích gì?",["Tiết kiệm thời gian và giảm phụ thuộc internet","Để chỉ nhóm trưởng được trình bày","Để BHL kiểm soát file cá nhân","Để hạn chế phản biện"],0),
+s(LY,"Ai có trách nhiệm ghi nhận việc phân chia nhóm qua từng chủ đề?",["Lớp Trưởng","Coach","Assistant","Ban Truyền Thông"],0),
+s(LY,"Trong phần làm việc nhóm, khi phát hiện thành viên khác đang hù dọa, Team cần làm gì?",["Bỏ qua","Báo ngay cho Ban Huấn Luyện","Chờ cuối chủ đề phản ánh","Đưa lên Golden Board ngay"],1),
+s(LY,"Sau mỗi buổi huấn luyện, BHL cần làm gì với các điểm cần khắc phục của từng Team?",["Họp nhanh, thống nhất và hướng dẫn học viên cách sửa","Để học viên tự đoán","Chỉ thông báo cho Nhóm Trưởng","Chuyển hết cho lớp trưởng"],0),
+s(TH,"Trong buổi học, nhóm dùng nhiều laptop cùng mở để tiện chỉnh sửa. Điều này có phù hợp không?",["Phù hợp nếu nhóm thấy tiện","Không phù hợp vì nguyên tắc là một máy trình chiếu chính, các máy khác gập lại","Phù hợp nếu có internet mạnh","Chỉ không phù hợp với nhóm yếu"],1),
+s(TH,"Sau buổi huấn luyện, Team sửa bài nhưng không đối chiếu checklist các điểm cần khắc phục. Rủi ro là gì?",["Không sao nếu slide đẹp hơn","Dễ sửa sai trọng tâm và lặp lỗi ở buổi sau","Chỉ ảnh hưởng nhóm trưởng","Chỉ ảnh hưởng phần truyền thông"],1),
+s(TH,"Một Team phát hiện thành viên không giữ cam kết nhưng vẫn ngại báo BHL vì sợ mất hòa khí. Theo quy định vận hành, nên làm gì?",["Tiếp tục im lặng","Cập nhật ngay cho BHL chủ đề","Chờ đến cuối chủ đề","Nhờ team khác góp ý hộ"],1),
+s(TH,"Trong một cuộc họp nhóm, Team bị xúi làm theo hướng trái với phương pháp huấn luyện. Cách xử lý phù hợp là gì?",["Thử làm xem sao","Không nghe theo và báo BHL nếu cần","Làm nửa vời cho an toàn","Hỏi cộng đồng trước"],1),
+s(TH,"BHL đã hướng dẫn cách sửa nhưng Team không ghi lại vào danh sách theo dõi. Điều gì dễ xảy ra?",["Không ảnh hưởng nếu team nhớ tốt","Khó kiểm tra lại tiến độ khắc phục ở các buổi sau","Chỉ mất thời gian viết biên bản","Chỉ ảnh hưởng Assistant"],1),
+s(TH,"Khi cả Team không tự giải được tình huống và quá bi quan, nhưng vẫn chỉ chat qua lại mà không tìm cách gặp trực tiếp HLV. Đây là gì?",["Đúng quy trình","Chưa tận dụng hết kênh hỗ trợ ưu tiên cuối cùng","Tốt vì tiết kiệm thời gian","Không ảnh hưởng nếu sau đó nộp bài đúng hạn"],1),
+];
+
+// ============================================================
+// SET 3 – Vai trò, nghĩa vụ, quyền hạn chi tiết
+// ============================================================
+SETS[3]=[
+s(LY,"Ai chịu trách nhiệm phát triển phương pháp huấn luyện của chương trình?",["HLV Chủ Đề","Trưởng Ban Huấn Luyện","Ban Vận Hành","Cộng đồng Lãnh Đạo Số"],1),
+s(LY,"HLV có trách nhiệm tham gia tối thiểu bao nhiêu hoạt động ngoại khóa?",["Không bắt buộc","Tối thiểu 1 Retreat Day hoặc Xuống Núi tại bất kỳ vùng/miền","Tất cả các hoạt động ngoại khóa","Chỉ các hoạt động ở địa bàn mình"],1),
+s(LY,"Assistant được phép đánh giá học viên không?",["Được phép đánh giá bình thường","Chỉ được đánh giá nhưng không tính vào điểm chung","Không được tham gia đánh giá học viên","Được đánh giá sau khi có phép Tiger Coach"],2),
+s(LY,"Nhóm Trưởng có trách nhiệm gì với Golden Board?",["Không liên quan đến Golden Board","Phối hợp với Ban Cán sự cập nhật Golden Board mỗi tuần","Tự lập Golden Board riêng cho nhóm","Chỉ đọc Golden Board khi được thông báo"],1),
+s(LY,"Học viên cần sử dụng tên và ảnh đại diện như thế nào trên các kênh?",["Có thể dùng nickname và ảnh ảo","Bắt buộc tên thật (khai sinh) và ảnh cá nhân thật","Tên thật nhưng ảnh tùy ý","Tùy theo yêu cầu của từng kênh"],1),
+s(LY,"Trưởng Ban Huấn Luyện chịu trách nhiệm giao tiếp với ai khi có xung đột liên quan đến cộng đồng?",["Lớp Trưởng","Cộng đồng Lãnh Đạo Số và Cộng đồng CIO Vietnam","Ban Vận Hành","Ban Pháp Chế"],1),
+s(LY,"Ai có trách nhiệm viết lời giới thiệu Team với Ban Huấn Luyện?",["Thư ký nhóm","Nhóm Trưởng","Bất kỳ thành viên nào","Lớp Phó"],1),
+s(LY,"Nhóm Trưởng thứ hai của một nhóm chủ đề cần đáp ứng điều kiện gì?",["Phải là người có kinh nghiệm nhất nhóm","Khi còn thành viên chưa làm Nhóm Trưởng lần đầu thì người đã làm không được nhận lần 2","Phải được BHL chỉ định","Bầu lại hoàn toàn tự do"],1),
+s(LY,"Đánh giá kết quả chủ đề cần thực hiện và hoàn thành khi nào?",["Sau khi kết thúc toàn bộ chủ đề","Ở buổi huấn luyện cuối của chủ đề","7 ngày sau buổi huấn luyện cuối","Bất kỳ lúc nào trong chủ đề"],1),
+s(LY,"Học viên đánh giá các thành viên khác dựa trên yếu tố gì?",["Điểm trình bày và kiến thức chuyên môn","Kỹ năng phụ trợ dựa trên hành vi tương tác xuyên suốt chủ đề","Sự chuyên cần và đúng giờ","Kết quả bài kiểm tra lý thuyết"],1),
+s(LY,"Ai phải chịu trách nhiệm giải trình với Ban Huấn Luyện về kết quả chủ đề?",["Nhóm Trưởng","HLV của chủ đề","Lớp Trưởng","Ban Vận Hành"],1),
+s(LY,"Học viên cần mang tình huống thực tiễn vào chủ đề theo tiêu chí nào?",["Càng to, tầm nhìn càng tốt","Không quá to, không quá nhỏ để thuận lợi thực hành","Phải là tình huống đang xảy ra tại doanh nghiệp","Bất kỳ tình huống nào miễn là thực tế"],1),
+s(LY,"Ai có quyền hủy bỏ một vi phạm đã được ghi nhận trên Golden Board của BHL?",["Lớp Trưởng","Ban Vận Hành","Coach","Tiger Coach"],2),
+s(LY,"TC/A phải gửi ít nhất bao nhiêu câu hỏi cho Coach phê duyệt trước mỗi buổi huấn luyện?",["1 câu","2 câu","3 câu","5 câu"],1),
+s(LY,"Ai chịu trách nhiệm kiểm tra để đảm bảo học viên hiểu rõ vai trò, nhiệm vụ và quyền của mình?",["Ban Vận Hành","Lớp Trưởng","HLV","Tiger Coach"],2),
+s(LY,"Điều kiện trở thành Assistant – bước kiểm tra cuối cùng là gì?",["Phỏng vấn với Trưởng Ban Vận Hành","Hoàn thành các bài kiểm tra của HLV Chủ Đề","Được đa số học viên trong lớp đồng ý","Thi đạt điểm trên 90%"],1),
+s(LY,"Ban Truyền Thông chọn tối thiểu bao nhiêu bài thu hoạch học viên để đăng trên kênh chính thức sau mỗi chủ đề?",["1 bài","2 bài","3 bài","5 bài"],1),
+s(LY,"Cộng đồng Lãnh Đạo Số có vai trò gì trong hoạt động tuyển sinh?",["Không tham gia","Cung cấp nguồn lực tuyển sinh, tham gia truyền thông và hỗ trợ trao chứng chỉ","Đứng đầu Ban Tuyển Sinh","Phỏng vấn ứng viên"],1),
+s(LY,"Ban Pháp Chế có vai trò gì sau v2.0?",["Kiểm soát tuân thủ quy định hàng ngày","Rà soát các quy định và hoạt động để đảm bảo phù hợp định hướng","Phạt vi phạm và quản lý Golden Board","Phê duyệt mọi quyết định của BVH"],1),
+s(LY,"Ai có trách nhiệm xây dựng Từ Điển Năng Lực?",["Ban Vận Hành","HLV","Tiger Coach","Lớp Trưởng"],1),
+s(LY,"Thư Ký trong cơ cấu tổ chức huấn luyện trực thuộc ai?",["Ban Vận Hành","Trực tiếp dưới HLV Trưởng","Ban Pháp Chế","Không nằm trong cơ cấu huấn luyện"],1),
+s(LY,"Ai có trách nhiệm viết bài giới thiệu chủ đề trước mỗi chủ đề huấn luyện?",["Ban Vận Hành","Ban Huấn Luyện chủ đề","Lớp Trưởng","Tiger Coach"],1),
+s(LY,"Ai chịu trách nhiệm lập danh sách học viên tham gia chương trình và duyệt chính thức?",["Ban Tuyển Sinh","Trưởng Ban Tuyển Dụng (BTD)","Trưởng Ban Huấn Luyện","Ban Vận Hành"],0),
+s(LY,"Lớp Trưởng có được can dự vào hoạt động của từng Team trong các chủ đề không?",["Có, để đảm bảo chất lượng","Không, Lớp Trưởng không can dự","Chỉ khi có xung đột xảy ra","Chỉ khi BHL yêu cầu"],1),
+s(LY,"Thủ Quỹ trong Ban Cán Sự lớp có nhiệm vụ chính là gì?",["Điều phối các hoạt động truyền thông","Đảm bảo quản lý thu chi","Tổ chức các buổi họp nhóm","Báo cáo kết quả với BHL"],1),
+s(LY,"Học viên kiểm tra phản hồi các nhóm khác trong khi trình bày nhằm mục đích gì?",["Thi đua giữa các nhóm","Phản biện và cùng học hỏi lẫn nhau","Để BHL đánh giá học viên","Để chọn ra nhóm xuất sắc nhất"],1),
+s(TH,"Một Assistant đặt câu hỏi trong buổi chính thức mà chưa được Coach/Tiger Coach duyệt trước. Điều gì xảy ra?",["Không sao vì câu hỏi có ích","Vi phạm quy định, câu hỏi không trong cấu trúc bắt buộc phải được Coach/TC duyệt","TC có thể tự duyệt sau khi Assistant hỏi","Chỉ áp dụng nếu câu hỏi sai chủ đề"],1),
+s(TH,"Sau khi kết thúc chủ đề, Coach nhận thấy một học viên không có cải thiện sau các cảnh báo. Coach cần làm gì?",["Đợi thêm một chủ đề nữa","Mời học viên trao đổi riêng và cân nhắc mời ra khỏi chương trình","Báo cáo lên Cộng đồng Lãnh Đạo Số","Thông báo công khai để tạo áp lực"],1),
+s(TH,"Một thành viên dùng chức danh hiện tại của mình để tạo áp lực với đồng đội trong nhóm. Đây là loại xung đột gì?",["Xung đột về chuyên môn","Xung đột cá nhân do đề cao cái tôi","Xung đột về phân công công việc","Xung đột về thời gian"],1),
+s(TH,"Bạn là Nhóm Trưởng và phát hiện kế hoạch nhóm có hoạt động 'mang tính đối phó'. Hậu quả gì có thể xảy ra?",["Không có hậu quả nếu kết quả tốt","Nhóm Trưởng chịu trách nhiệm giải trình với Ban Huấn Luyện","BVH sẽ xử lý kỷ luật cả nhóm","Chủ đề bị dừng lại"],1),
+s(TH,"Trong buổi huấn luyện, HLV quan sát và đánh giá học viên dựa trên gì?",["Điểm bài nộp hàng tuần","Từ Điển Năng Lực và cách học viên thể hiện trong buổi","Số lượng câu hỏi đặt ra","Kết quả bài thi lý thuyết"],1),
+s(TH,"Học viên cần ghi nhận sự hỗ trợ từ BHL vào đâu?",["Không cần ghi nhận","Vào File Hỏi - Đáp lưu trong thư mục tài nguyên môn học","Vào nhóm chat của lớp","Vào báo cáo cuối chủ đề"],1),
+s(TH,"HLV phát hiện đề cương chủ đề cần cập nhật. Ai có thẩm quyền quyết định cuối cùng?",["Tiger Coach chủ đề","HLV chủ đề","Trưởng BHL","Ban Vận Hành"],2),
+s(TH,"Học viên muốn dùng tài liệu bên ngoài tài liệu BHL cung cấp. Cần làm gì?",["Tự do sử dụng nếu thấy phù hợp","Xin phép HLV và được đồng ý mới được dùng","Hỏi Tiger Coach","Chia sẻ link trong nhóm chat để mọi người tham khảo"],1),
+s(TH,"Nhóm trưởng có thể làm Nhóm Trưởng lần 2 không khi còn thành viên chưa từng làm lần đầu?",["Có nếu nhóm đề cử","Không, phải nhường cho người chưa làm lần đầu","Tùy thuộc vào HLV quyết định","Có nếu được BHL phê duyệt"],1),
+s(TH,"Khi tranh luận, một thành viên liên tục công kích cá nhân thay vì tập trung vào vấn đề. Nhóm Trưởng cần làm gì?",["Để các thành viên tự xử lý","Kết thúc buổi thảo luận luôn","Định hướng lại tranh luận vào mục tiêu, áp dụng luật chơi đã định","Mời thành viên đó ra khỏi nhóm"],2),
+s(TH,"Học viên A phàn nàn về học viên B trực tiếp với HLV qua gọi điện cá nhân thay vì leo thang theo sơ đồ. Điều này có phù hợp không?",["Phù hợp vì tốc độ xử lý nhanh hơn","Không phù hợp, cần leo thang theo đúng kênh và sơ đồ","Tùy tình huống, học viên tự quyết định","Chỉ phù hợp nếu là tình huống khẩn"],1),
+s(TH,"Nhóm bạn muốn mời thêm một khách mời bên ngoài tham dự Team Building. Cần làm gì?",["Tự do mời vì Team Building là của học viên","Phải được thông qua xét duyệt của Ban Huấn Luyện","Chỉ cần thông báo cho Lớp Trưởng","Phải hỏi ý kiến toàn bộ nhóm"],1),
+s(TH,"Khi kết thúc chủ đề, ai chịu trách nhiệm phát triển HLV Tập Sự (Tiger Coach)?",["Trưởng BHL","HLV (Coach) chủ đề","Ban Vận Hành","Tiger Coach mùa trước"],1),
+
+s(LY,"Ban Vận Hành có trách nhiệm gì với tài nguyên và kênh tương tác của chương trình?",["Chỉ quản lý tài chính của lớp","Quản lý tài nguyên chia sẻ của chương trình và các kênh tương tác","Chỉ hỗ trợ Retreat Day","Chỉ phối hợp tuyển sinh"],1),
+
+s(LY,"Ai chịu trách nhiệm phát triển và phê duyệt Sổ Tay Huấn Luyện?",["Ban Pháp Chế","Huấn Luyện Viên Trưởng","Ban Vận Hành","Ban Truyền Thông"],1),
+s(LY,"Coach có trách nhiệm gì với danh sách học viên tham gia chương trình?",["Chỉ tham khảo","Duyệt danh sách các học viên tham gia chương trình","Chỉ gửi đề xuất cho BTS","Không liên quan"],1),
+s(LY,"Tiger Coach bắt buộc tham gia tối thiểu hoạt động ngoại khóa nào?",["Chỉ Team Building","Tối thiểu một Team Building và một Retreat Day hoặc Xuống Núi","Chỉ Xuống Núi","Không bắt buộc"],1),
+s(LY,"Assistant khi hỗ trợ học viên cần điều kiện nào để đảm bảo minh bạch?",["Được lớp trưởng biết là đủ","Cần sự đồng ý của Tiger Coach","Tự quyết nếu thấy cần","Xin phép sau khi hỗ trợ"],1),
+s(LY,"Học viên có trách nhiệm gì với các Team khác trong buổi trình bày?",["Không cần theo dõi","Theo dõi và phản hồi/phản biện các Team khác","Chỉ nghe nhóm của mình","Chỉ nhóm trưởng mới phản biện"],1),
+s(LY,"Ban Tuyển Dụng chịu trách nhiệm giải trình với Ban Huấn Luyện về việc gì?",["Nội dung truyền thông","Sự chọn lựa ứng viên mời phỏng vấn và tham gia","Quỹ vận hành lớp","Chụp hình sự kiện"],1),
+s(LY,"Ban Truyền Thông chịu trách nhiệm về điều gì với Ban Huấn Luyện?",["Kết quả truyền thông","Tài chính lớp","Đánh giá học viên","Phát triển Assistant"],0),
+s(LY,"Cộng đồng Lãnh Đạo Số hỗ trợ hoạt động nào của chương trình?",["Chỉ tổ chức lớp học","Tuyển sinh, truyền thông và trao chứng chỉ cuối khóa","Chỉ phỏng vấn ứng viên","Chỉ quản lý quỹ"],1),
+s(TH,"Một Assistant tự ý gửi tài liệu ngoài danh mục duyệt cho học viên với ý tốt. Theo vai trò, điều này thế nào?",["Được nếu tài liệu hay","Không phù hợp vì Assistant không được chia sẻ tài liệu ngoài tài liệu duyệt","Chỉ cần báo lớp trưởng","Được nếu Tiger Coach không phản đối"],1),
+s(TH,"Lớp Trưởng muốn can thiệp sâu vào cách một Team đang xử lý business case. Theo vai trò trong Sổ Tay, cách này thế nào?",["Phù hợp vì lớp trưởng chịu trách nhiệm lớp","Không phù hợp vì lớp trưởng không can dự vào hoạt động của từng Team","Phù hợp nếu Team yếu","Chỉ cần báo HLV sau"],1),
+
+s(LY,"Ai chịu trách nhiệm tổng quát chương trình?",["Huấn Luyện Viên Trưởng","Ban Vận Hành","Ban Tuyển Sinh","Lớp Trưởng"],0),
+s(LY,"Coach có trách nhiệm gì với việc lấy ý kiến đánh giá học viên ở cuối mùa?",["Thực hiện lấy ý kiến đánh giá","Chỉ xem báo cáo từ BVH","Không liên quan","Chỉ lớp trưởng thực hiện"],0),
+s(LY,"Tiger Coach có trách nhiệm gì với đội ngũ Assistant?",["Đào tạo, hướng dẫn, đánh giá và báo cáo kết quả cho HLV","Chỉ hỗ trợ kỹ thuật trình chiếu","Chỉ phân công check-in","Không liên quan"],0),
+s(LY,"Học viên có trách nhiệm gì với xung đột trong Team trước khi nhờ HLV?",["Tự đàm phán, giải quyết trên tinh thần người lớn","Bỏ qua để tránh mất hòa khí","Đưa ngay lên cộng đồng LDS","Chỉ nhóm trưởng mới được tham gia"],0),
+s(TH,"Một Tiger Coach cố tình tư vấn giải pháp và viết giúp bài cho Team mà không có phép HLV. Điều này thế nào?",["Được nếu giúp Team đạt kết quả","Không phù hợp vì vượt phạm vi hỗ trợ","Chỉ cần báo lại sau","Được nếu Team đồng ý"],1),
+s(TH,"Một học viên dùng nickname và avatar ảo trong nhóm chính thức. Theo vai trò và nghĩa vụ, cần xử lý sao?",["Không sao nếu mọi người nhận ra","Yêu cầu dùng tên thật và ảnh thật theo quy định","Chỉ cần đổi khi truyền thông công khai","Chỉ BTT mới cần tuân thủ"],1),
+s(TH,"Ban Truyền Thông muốn tự đăng ấn phẩm mà chưa xét duyệt nội dung/hình ảnh đầy đủ. Điều này lệch ở đâu?",["Không lệch","Lệch với vai trò xét duyệt ấn phẩm trước khi sử dụng","Chỉ lệch nếu đăng LinkedIn","Chỉ lệch khi có logo"],1),
+s(TH,"Một học viên chọn tài liệu ngoài để học nhưng không xin phép HLV vì nghĩ là đọc thêm thôi. Theo nghĩa vụ học viên, cách này có ổn không?",["Ổn vì chỉ là tham khảo","Không ổn, dùng tài liệu ngoài phải có sự đồng ý của HLV","Ổn nếu nhóm trưởng đồng ý","Chỉ cần Tiger Coach biết"],1),
+s(TH,"Ban Tuyển Dụng chọn ứng viên nhưng không thể giải trình lý do chọn lựa với BHL. Đây là thiếu sót gì?",["Thiếu kỹ năng truyền thông","Thiếu trách nhiệm giải trình về sự chọn lựa ứng viên","Thiếu quản lý tài chính","Không phải thiếu sót"],1),
+s(TH,"Lớp Trưởng yêu cầu được quyết định thay Team về business case để đảm bảo tiến độ. Theo vai trò, điều này có phù hợp không?",["Phù hợp vì lớp trưởng điều hành lớp","Không phù hợp vì lớp trưởng không can dự hoạt động từng Team","Phù hợp nếu Coach bận","Chỉ phù hợp với Team yếu"],1),
+];
+
+// ============================================================
+// SET 4 – Truyền thông, sự kiện, cộng đồng
+// ============================================================
+SETS[4]=[
+s(LY,"Hashtag '#LDS' là viết tắt của cụm từ nào?",["Leaders Digital Series","Lãnh Đạo Số","Leadership Digital System","Leaders Development Seminar"],1),
+s(LY,"Mục tiêu truyền thông nào KHÔNG được đề cập trong Sổ Tay Huấn Luyện?",["Giúp nhà tuyển dụng nhìn thấy tài năng","Giúp BHL tiếp cận ứng viên mùa tiếp theo","Giúp học viên nhận được học bổng","Giúp gia tăng gắn kết giữa các học viên"],2),
+s(LY,"Ai là người truyền thông tốt nhất của chương trình?",["BHL vì có nhiều kiến thức","Học viên (Hạt Giống) vì người thật - việc thật - câu chuyện thật","Tiger Coach vì có kinh nghiệm 2 mùa","Ban Truyền Thông vì chuyên nghiệp"],1),
+s(LY,"Bài viết truyền thông sau buổi huấn luyện nên tập trung vào điều gì?",["Mục tiêu và tiến trình thực hiện","Cảm ơn các HLV và Tiger Coach","Bài học, giá trị, kết quả chuyển hóa từng chủ đề","Thông tin về chương trình để tuyển sinh"],2),
+s(LY,"Hoạt động truyền thông được thực hiện trên những kênh nào?",["Chỉ Facebook cá nhân","Mạng xã hội, Facebook, LinkedIn, website chương trình và kênh Cộng đồng LDS","Chỉ website chính thức","Chỉ các nhóm kín của chương trình"],1),
+s(LY,"Khi đăng bài truyền thông, cần đính kèm gì bắt buộc?",["Chỉ cần hashtag","Hashtag và link tuyển sinh theo quy định","Ảnh tập thể và hashtag","Chữ ký của BHL"],1),
+s(LY,"Nếu muốn thêm hashtag ngoài 8 hashtag chính thức, cần làm gì?",["Tự do thêm nếu phù hợp chủ đề","Được sự phê duyệt của Trưởng Ban Truyền Thông hoặc HLV Trưởng","Hỏi ý kiến nhóm","Thông báo trên nhóm chat lớp"],1),
+s(LY,"Kết thúc chương trình, học viên cần làm bài thu hoạch dưới hình thức nào?",["Chỉ bài viết dạng văn","Các hình thức do Ban Huấn Luyện quy định để dùng trong Xuống Núi và đăng công khai","Slide trình bày 5 phút","Bảng tổng kết theo mẫu BVH cung cấp"],1),
+s(LY,"Retreat Day hướng tới những mục tiêu nào cho học viên?",["Chỉ làm quen với BHL","Hiểu phương pháp, xác định mục tiêu, làm quen đồng đội và thực hành làm nhóm","Học kỹ năng lãnh đạo nâng cao","Chỉ bầu Ban Cán Sự lớp"],1),
+s(LY,"Team Building được tổ chức bao nhiêu lần trong một mùa theo Master Plan mùa 10?",["1 lần","2 lần","3 lần","4 lần"],1),
+s(LY,"Digital Leaders Coaching Orientation có những nội dung chính nào?",["Giới thiệu chương trình và phổ biến quy định","Nâng cấp tư duy, xây dựng đội nhóm và kỹ năng trình bày","Kiểm tra lý thuyết đầu vào","Bầu Ban Cán Sự lớp"],1),
+s(LY,"Kênh truyền thông nào được đề cập cho hoạt động sau khi phỏng vấn?",["Telegram và Zalo","Website, Facebook và LinkedIn của chương trình","Chỉ nhóm Facebook kín","Email nội bộ BHL"],1),
+s(LY,"Ngày 27/02 gắn với sự kiện lịch sử nào của chương trình?",["Ngày ra đời của chương trình HGLĐS","Ngày BHL gặp nhau và chốt chương trình huấn luyện lần đầu từ năm 2016","Ngày tốt nghiệp khóa đầu tiên","Ngày thành lập Cộng đồng CIO Vietnam"],1),
+s(LY,"Cộng đồng Lãnh Đạo Số có bao nhiêu Câu Lạc Bộ theo cơ cấu tổ chức trong Sổ Tay?",["3 CLB","4 CLB","5 CLB","6 CLB"],2),
+s(LY,"Bài viết truyền thông sau buổi huấn luyện do ai thực hiện?",["Tất cả học viên cùng làm","Luân phiên từng học viên, mỗi buổi 1 học viên","Chỉ Lớp Trưởng","Tiger Coach và Assistant"],1),
+s(LY,"Sau khi kết thúc mỗi chủ đề, Ban Huấn Luyện chủ đề đăng bài gì?",["Bài giới thiệu chủ đề tiếp theo","Bài chúc mừng học viên kết thúc chủ đề thành công","Bài tổng kết điểm số","Không có quy định cụ thể"],1),
+s(LY,"Khi check-in buổi huấn luyện, học viên phải đăng với hình ảnh như thế nào?",["Hình cá nhân selfie","Hình tập thể và đăng công khai theo quy định BTT","Hình ảnh minh họa chủ đề","Không bắt buộc có hình"],1),
+s(LY,"Theo hướng dẫn hoạt động, ảnh buổi huấn luyện cần đáp ứng độ phân giải tối thiểu bao nhiêu pixel chiều rộng cho ảnh chính?",["800px","1280px","1920px","2560px"],2),
+s(LY,"Tỷ lệ khung hình khuyến nghị cho ảnh truyền thông là bao nhiêu?",["4:3","1:1","16:9","9:16"],2),
+s(LY,"Đội ngũ quay phim, chụp hình trong Team Building do ai sắp xếp?",["BVH sắp xếp chuyên nghiệp","Học viên tự tổ chức","BTT","BHL chỉ định"],1),
+s(LY,"Nội dung truyền thông nào KHÔNG được đề cập trong Sổ Tay Huấn Luyện?",["Bài thu hoạch kết thúc chủ đề","Video về các hoạt động liên quan","Bảng so sánh chương trình với các khóa học khác","Bài reflection chủ đề"],2),
+s(LY,"Sau khi kết thúc Xuống Núi, BVH có bao nhiêu ngày để đăng thông báo chúc mừng trên các kênh?",["3 ngày","5 ngày","7 ngày","14 ngày"],2),
+s(LY,"Khi đăng bài thu hoạch sau sự kiện Xuống Núi, nội dung tuân thủ theo quy định nào?",["Tự do viết theo cảm nhận","Theo yêu cầu bài viết thu hoạch Xuống Núi do BHL quy định","Theo template mùa trước","Không có quy định cụ thể"],1),
+s(LY,"Tên cũ của chương trình trước khi đổi thành 'Digital Leaders Coaching' là gì?",["CIO Learning Program","CIO Coaching","Digital Transformation Program","CIO Leadership Academy"],1),
+s(LY,"Thành viên Cộng đồng Lãnh Đạo Số được đón nhận bởi ai khi gia nhập?",["Trưởng Ban Vận Hành","Chủ tịch Cộng đồng Lãnh Đạo Số","HLV Trưởng","Lớp Trưởng mùa hiện tại"],1),
+s(TH,"Một hạt giống đăng bài truyền thông nhưng dùng ảnh đại diện ảo (avatar anime). Điều này vi phạm quy định nào?",["Vi phạm về nội dung bài đăng","Vi phạm yêu cầu sử dụng ảnh cá nhân thật trên các kênh giao tiếp","Vi phạm thời hạn đăng bài","Không vi phạm gì"],1),
+s(TH,"Bạn muốn sử dụng hashtag mới #DLCVIETNAM trong bài viết kèm với hashtag chính thức. Nên làm gì?",["Tự do dùng vì là hashtag mới không cấm","Xin phê duyệt của Trưởng BTT hoặc HLV Trưởng trước","Hỏi ý kiến nhóm","Thông báo trên nhóm chat để mọi người biết"],1),
+s(TH,"Học viên viết bài cảm xúc chỉ kể lại tiến trình và mục tiêu của buổi huấn luyện, không có bài học hay chuyển hóa. BHL nhận xét như thế nào?",["Bài viết phù hợp vì đủ thông tin","Đây là biểu hiện của việc không học được gì từ chủ đề","Cần bổ sung thêm hình ảnh","Cần rút gọn cho ngắn hơn"],1),
+s(TH,"Sau sự kiện Team Building 5 ngày, bài đăng truyền thông trên kênh chính thức vẫn chưa được thực hiện. Ai chịu trách nhiệm?",["Lớp Trưởng","Trưởng BTC.TT của sự kiện đó","BTT","BHL"],1),
+s(TH,"Thành viên LDS cũ muốn tham dự buổi Orientation của mùa mới với tư cách dự thính. Điều kiện là gì?",["Tự do tham dự vì là thành viên LDS","Đăng ký với BTC, đóng góp chi phí nếu có, chỉ được nghe và quan sát","Phải có lời mời từ BHL","Không được tham dự dưới bất kỳ hình thức nào"],1),
+s(TH,"Khi một thành viên không thoải mái với hình ảnh cá nhân được lan truyền ra bên ngoài, cần làm gì?",["Im lặng vì đã đồng ý tham gia chương trình","Phản hồi cho Ban Huấn Luyện ngay lập tức","Tự liên hệ đến kênh đã đăng yêu cầu gỡ","Thông báo trong nhóm chat lớp"],1),
+s(TH,"BTS cần truyền thông liên tục trong quá trình tuyển sinh. Tần suất tối thiểu là bao nhiêu?",["1 bài/tuần","2 bài/tuần","3 bài/tuần","1 bài/ngày"],1),
+s(TH,"Bài thu hoạch cuối mùa của học viên dùng vào mục đích gì?",["Chỉ lưu trữ cá nhân","Sử dụng trong lễ Xuống Núi và đăng công khai theo quy định BTT","Nộp cho Ban Vận Hành lưu hồ sơ","Gửi cho nhà tuyển dụng"],1),
+s(TH,"BTS cần gửi email countdown nhắc đăng ký phỏng vấn trước bao nhiêu ngày?",["7 ngày","5 ngày","3 ngày","1 ngày"],2),
+s(TH,"Cộng đồng LDS tham gia bình chọn và chia sẻ thông tin tuyển sinh. Đây thuộc hoạt động nào?",["Bắt buộc theo quy định","Được khuyến khích và kêu gọi bởi BTS","Hoạt động riêng của Cộng đồng LDS","Không liên quan đến hoạt động tuyển sinh"],1),
+s(TH,"Sau khi phỏng vấn, BTS cần đăng ảnh riêng từng ứng viên với mục đích gì?",["Để lưu hồ sơ tuyển dụng","Để có nội dung truyền thông bài về sự kiện phỏng vấn","Để ứng viên nhớ ngày phỏng vấn","Để so sánh với các mùa trước"],1),
+s(TH,"Đội ngũ tổ chức Team Building cần gặp ai để xét duyệt trò chơi trong sự kiện?",["Lớp Trưởng","Đại diện nhóm tổ chức làm việc với HLV để xét duyệt","BTT","Trưởng BVH"],1),
+s(TH,"Một học viên cảm ơn HLV rất nhiều trong bài viết thu hoạch. BHL có thể nhận xét gì?",["Đây là điều tốt cần khuyến khích","Nên hạn chế tối đa việc cảm ơn HLV, sự chuyển hóa mới là cảm ơn sâu sắc nhất","Cần thêm nội dung bài học vào","Bài viết đã hoàn chỉnh"],1),
+s(TH,"BHL chủ đề muốn thay đổi quy định vận hành so với Sổ Tay Huấn Luyện. Cần làm gì?",["Tự điều chỉnh theo thực tế chủ đề","HLV chủ đề thống nhất những thủ tục không vi phạm STHL","Phải được BVH phê duyệt","Thông báo cho học viên biết để điều chỉnh"],1),
+s(TH,"Trong buổi huấn luyện, Lớp Trưởng có trách nhiệm gì?",["Can dự vào hoạt động của từng nhóm","Phân công thành viên chụp ảnh, tea-break và tổ chức bắt đầu đúng giờ","Đánh giá từng nhóm thay cho HLV","Làm thư ký ghi biên bản"],1),
+
+s(LY,"Mục tiêu truyền thông nào liên quan trực tiếp đến gia đình, bạn bè và đồng nghiệp của học viên?",["Để họ tham gia phỏng vấn cùng","Giúp họ hiểu và chia sẻ các thách thức khi học viên dành thời gian cho chương trình","Để họ tài trợ cho chương trình","Để họ đánh giá kết quả chủ đề"],1),
+s(LY,"Sau mỗi chủ đề, Ban Huấn Luyện chủ đề phải chọn tối thiểu bao nhiêu bài thu hoạch của học viên để đăng trên kênh DLC?",["1 bài","2 bài","3 bài","4 bài"],1),
+s(LY,"Một trong các nội dung truyền thông được nêu rõ trong Sổ Tay là gì?",["Bảng lương BHL","Bài reflection chủ đề","Biên bản nội bộ nhóm kín","Danh sách vi phạm từng cá nhân"],1),
+s(LY,"Kênh truyền thông nào được nhắc rõ trong Sổ Tay?",["Chỉ TikTok","Facebook cá nhân/chương trình, LinkedIn cá nhân/chương trình và website chương trình","Chỉ YouTube","Chỉ email"],1),
+s(LY,"Khi thành viên không thoải mái với hình ảnh cá nhân bị lan truyền ra ngoài, cần phản hồi cho ai?",["Ban Huấn Luyện","Chỉ người chụp ảnh","Cộng đồng LDS","Không cần phản hồi"],0),
+s(LY,"Mục tiêu của Team Building có bao gồm nội dung nào?",["Chỉ vui chơi giải trí","Giúp BHL lắng nghe phản hồi từ hoạt động huấn luyện","Chỉ để chụp ảnh truyền thông","Chỉ để bầu lớp trưởng"],1),
+s(LY,"Retreat Day có vai trò gì với việc bầu Ban Cán Sự?",["Không liên quan","Là thời điểm bầu Lớp Trưởng và Lớp Phó","Chỉ bầu sau Orientation","Bầu sau chủ đề đầu tiên"],1),
+s(LY,"Ai có thể được xem là người truyền thông tốt nhất của chương trình?",["Chỉ BTT","Hạt Giống vì là người thật, việc thật, câu chuyện thật","Chỉ Coach Trưởng","Chỉ cộng đồng LDS"],1),
+s(TH,"Một bài thu hoạch cuối chủ đề chỉ nói mục tiêu ban đầu và tiến trình, gần như không có kết quả chuyển hóa. Theo định hướng truyền thông, nên chỉnh thế nào?",["Giữ nguyên vì đủ thông tin","Tập trung hơn vào bài học, giá trị và kết quả chuyển hóa","Chỉ thêm nhiều hashtag","Chỉ thêm ảnh nhóm"],1),
+s(TH,"Một thành viên muốn thêm hashtag chiến dịch riêng vào bài post truyền thông của chương trình. Cách làm đúng là gì?",["Tự thêm nếu thấy hợp","Xin phê duyệt của Trưởng BTT hoặc HLV Trưởng trước","Hỏi cả lớp rồi dùng","Đợi sau khi đăng rồi chỉnh"],1),
+
+s(LY,"Theo Sổ Tay, một trong các mục tiêu của truyền thông là gì?",["Giúp người làm nghề thấy giá trị chương trình và tham gia hoặc thúc đẩy ứng dụng số","Thay BHL đánh giá học viên","Quản lý quỹ lớp","Phân quyền cho Team"],0),
+s(LY,"Kết thúc chương trình, học viên cần làm bài thu hoạch theo hình thức do ai quy định?",["Ban Huấn Luyện","Lớp Trưởng","Ban Vận Hành","Cộng đồng LDS"],0),
+s(LY,"Ban Tuyển Sinh cần có bài viết nào sau khi tuyển chọn xong?",["Thông báo chính thức và chúc mừng thành viên được tuyển chọn","Bảng điểm phỏng vấn chi tiết","Biên bản họp kín của BHL","Danh sách câu hỏi phỏng vấn"],0),
+s(LY,"Kênh của Cộng đồng Lãnh Đạo Số và CIO Vietnam được dùng để làm gì trong truyền thông?",["Lan tỏa hoạt động và giá trị của chương trình","Chỉ lưu tài liệu nội bộ","Chỉ dùng cho phỏng vấn","Chỉ dùng để chấm điểm"],0),
+s(TH,"Một học viên đăng bài rất dài cảm ơn HLV nhưng gần như không nói gì về bài học và chuyển hóa. Theo tinh thần truyền thông, nên chỉnh thế nào?",["Giữ nguyên vì thể hiện tình cảm","Giảm phần cảm ơn, tăng phần bài học, giá trị và kết quả chuyển hóa","Chỉ thêm ảnh nhóm","Chỉ thêm hashtag"],1),
+s(TH,"Bài check-in buổi huấn luyện được đăng nhưng không công khai, chỉ bạn bè xem được. Điều này có thể làm giảm mục tiêu nào của truyền thông?",["Lan tỏa giá trị chương trình ra bên ngoài","Tổ chức Team Building","Thi lý thuyết đầu vào","Quản lý Golden Board"],0),
+s(TH,"Một video hoạt động dùng hình ảnh đẹp nhưng không đúng tinh thần hoặc nội dung thực tế. Rủi ro lớn nhất là gì?",["Không có gì nếu đẹp","Làm sai lệch giá trị 'người thật - việc thật - câu chuyện thật'","Chỉ ảnh hưởng BTT","Chỉ ảnh hưởng số lượng like"],1),
+s(TH,"Trong Team Building, học viên thuê đội chụp ảnh nhưng không ai trong lớp theo sát chất lượng và tiến độ ảnh. Điều này có thể ảnh hưởng gì?",["Không ảnh hưởng vì đã thuê ngoài","Ảnh/truyền thông có thể không đáp ứng nhu cầu chương trình","Chỉ ảnh hưởng gala dinner","Chỉ ảnh hưởng lớp trưởng"],1),
+s(TH,"Một thành viên LDS cũ vào buổi huấn luyện và góp ý công khai làm học viên hoang mang. Nên xử lý thế nào?",["Lắng nghe toàn bộ vì là cựu học viên","Giữ đúng vai trò và quy định chương trình, phản hồi qua BHL nếu có ảnh hưởng","Cho phép họ điều phối luôn","Để lớp trưởng quyết thay"],1),
+s(TH,"Bài thu hoạch Xuống Núi viết rất hay nhưng không theo yêu cầu bài viết do BHL/BTT quy định. Có nên dùng ngay không?",["Có, miễn hay là được","Chưa nên, cần chỉnh theo guideline chính thức","Có nếu được nhiều like","Chỉ cần thêm hashtag"],1),
+];
+
+// ============================================================
+// SET 5 – Hỗn hợp nâng cao, các tình huống phức tạp
+// ============================================================
+SETS[5]=[
+s(LY,"Bí quyết nào được nhấn mạnh đầu tiên trong Sổ Tay Huấn Luyện để có kết quả tốt?",["Tự học và đọc tài liệu nhiều nhất có thể","Xây dựng Tâm và Thế – học viên là người quyết định muốn gì và có được gì","Giữ đúng cam kết 100%","Thuyết trình tốt và chuyên nghiệp"],1),
+s(LY,"Tài liệu tham khảo và Từ Điển Năng Lực được gọi là gì trong bí quyết học tập?",["Nội dung phụ để tham khảo","Thứ cốt lõi, học viên phải bám sát và hiểu thấu đáo từng từ","Tài liệu đọc thêm ngoài giờ","Chỉ quan trọng trong kỳ thi"],1),
+s(LY,"Câu ngạn ngữ nào được dùng trong Sổ Tay để mô tả vai trò HLV?",["'Không thầy đố mày làm nên'","'Con khóc, mẹ cho bú'","'Học thầy không tày học bạn'","'Có công mài sắt có ngày nên kim'"],1),
+s(LY,"Phương pháp huấn luyện bao gồm các bước theo thứ tự nào?",["Lý thuyết – Thực hành – Đánh giá","Mục tiêu – Thực hiện – Phương án – Xem xét tính khả thi","Chuẩn bị – Huấn luyện – Kiểm tra","Phân tích – Thiết kế – Phát triển – Đánh giá"],1),
+s(LY,"Khi Học Viên thất bại ở một chủ đề, chương trình cho phép làm gì?",["Bị loại ngay khỏi chương trình","Được phép 'trả nợ' – làm lại sau đó","Được bảo lưu và làm lại cùng mùa sau","Phải thi lại trong vòng 48 giờ"],1),
+s(LY,"Tranh luận trong nhóm có mục đích gì theo Sổ Tay Huấn Luyện?",["Để xác định ai đúng ai sai","Để học viên hiểu góc nhìn nhau và nâng cao góc nhìn chung","Để BHL đánh giá năng lực cá nhân","Không được khuyến khích trong chương trình"],1),
+s(LY,"Ý tưởng 'điên rồ' trong tranh luận nhóm được nhìn nhận như thế nào?",["Cần bác bỏ ngay để tập trung vào thực tế","Các ý tưởng hay ho, giá trị thường đến từ ý tưởng có vẻ điên rồ","Chỉ phù hợp trong giai đoạn đầu chủ đề","Cần được HLV kiểm duyệt trước"],1),
+s(LY,"Khi nào Học Viên được 'mời trao đổi riêng' với Ban Huấn Luyện?",["Khi học viên muốn phản ánh về Tiger Coach","Khi kết quả dưới mục tiêu, không giữ cam kết, không cải thiện sau cảnh báo","Chỉ khi có vi phạm nghiêm trọng","Cuối mỗi chủ đề theo lịch định kỳ"],1),
+s(LY,"Số liệu giả trong bài trình bày dẫn đến hậu quả gì?",["Không sao nếu logic tốt","Là 'cái bẫy re-work' của chính học viên","Bị trừ điểm nhỏ","Nhóm phải làm lại toàn bộ tài liệu"],1),
+s(LY,"Theo Sổ Tay, khi nào nên hỏi HLV (ưu tiên từ Sổ Tay)?",["Chỉ khi hoàn toàn bế tắc","Khi nhóm không thống nhất, tình huống không chắc, giải pháp không rõ, có xung đột không giải được","Chỉ trong buổi huấn luyện chính thức","Không nên hỏi nhiều để tự lực"],1),
+s(LY,"Nếu thi lý thuyết lần 2 vẫn trượt, học viên cần gặp ai?",["Lớp Trưởng","HLV Chủ Đề","HLV Trưởng","Ban Vận Hành"],2),
+s(LY,"Trong buổi huấn luyện, ai là người trình bày cuối cùng của nhóm (trừ phần giới thiệu)?",["Thành viên trình bày tốt nhất","Nhóm Trưởng","Thành viên được HLV chỉ định","Thư ký nhóm"],1),
+s(LY,"Khi TC trả lời không thỏa đáng, học viên cần làm gì?",["Chấp nhận vì TC có thẩm quyền","Phản ánh ngay cho BHL/HLV chủ đề","Tự tìm câu trả lời trên internet","Hỏi lại TC lần nữa"],1),
+s(LY,"Theo Sổ Tay, yếu tố nào cốt lõi để Học Viên thành công?",["Kiến thức chuyên môn sâu","Được sự yêu quý của toàn Team và Team có chung động lực","Thuyết trình xuất sắc","Quan hệ tốt với HLV"],1),
+s(LY,"Chứng chỉ hoàn thành chương trình được chi trả như thế nào?",["BHL chi trả hoàn toàn","Học viên tự đóng phí để làm chứng chỉ và vật kỷ niệm","Cộng đồng LDS tài trợ","Nhà tài trợ chương trình"],1),
+s(LY,"Thành viên BVH mùa trước có vai trò gì trong mùa mới?",["Tự động trở thành HLV","Lớp Trưởng/Lớp Phó mùa trước là thành viên BVH mùa hiện tại","Trở thành Tiger Coach","Rời chương trình"],1),
+s(LY,"Các hạt giống mùa trước là thành viên của tổ chức nào trong mùa hiện tại?",["Ban Huấn Luyện","Ban Tuyển Sinh","Ban Vận Hành","Ban Truyền Thông"],1),
+s(LY,"Khi hình thành sứ mệnh cho Team, ai chịu trách nhiệm dẫn dắt?",["Thành viên đề xuất","Nhóm Trưởng","HLV","Lớp Trưởng"],1),
+s(LY,"Hoạt động nào của chương trình có chi phí được chia đều cho cả Học Viên và BHL?",["Chi phí thuê phòng học","Retreat Day, Team Building và các hoạt động ngoại khóa","Chi phí tài liệu học tập","Tất cả các chi phí vận hành"],1),
+s(LY,"Theo Sổ Tay, năng lực lõi nào của nhà quản lý được nhấn mạnh cần trau dồi qua thực tế?",["Kỹ năng lập kế hoạch","Giải quyết vấn đề (problem solving)","Kỹ năng đàm phán","Quản lý tài chính"],1),
+s(LY,"Khi nào chương trình sẽ dừng lại theo quan điểm và cam kết trong Sổ Tay?",["Khi dưới 5 học viên còn tham gia","Chương trình tiếp tục kể cả khi chỉ còn 1 học viên","Khi BHL không đủ nhân sự","Khi hết nguồn tài trợ"],1),
+s(LY,"Theo Master Plan mùa 10, chủ đề nào được triển khai đồng thời ở cả HN và HCM nhưng thứ tự khác nhau?",["DITS và BRM","BRM và ITSM","ITSM và DITS","DM và EA"],2),
+s(LY,"Buổi nào là bắt buộc với cả Học Viên lẫn Tiger Coach/Assistant?",["Chỉ Retreat Day","Tất cả buổi huấn luyện chính thức","Team Building và Retreat Day là bắt buộc với TC/A","Xuống Núi"],2),
+s(LY,"Khi có xung đột lớn trong Team, ai là người chịu trách nhiệm kiểm soát tình huống?",["HLV trực tiếp can thiệp","Nhóm Trưởng là người chịu trách nhiệm kiểm soát và xử lý","Lớp Trưởng","Ban Vận Hành"],1),
+s(LY,"Chứng chỉ cuối khóa được hỗ trợ hoạt động trao bởi ai?",["Ban Huấn Luyện độc lập tổ chức","Ban Vận Hành hỗ trợ hoạt động trao chứng chỉ","Cộng đồng LDS toàn bộ tổ chức","Học viên tự tổ chức"],1),
+s(TH,"Nhóm bạn phát hiện giải pháp của mình có số liệu không chính xác ngay trước buổi trình bày. Nên làm gì?",["Trình bày với số liệu không chính xác rồi giải thích sau","Không trình bày phần đó","Thông báo cho BHL ngay và đề nghị làm rõ hoặc xin rút số liệu","Thay số liệu bừa cho có"],2),
+s(TH,"Học viên A nói với nhóm: 'Tôi 10 năm kinh nghiệm, cách tôi nói mới đúng, nghe tôi đi'. Đây là vấn đề gì?",["Người có kinh nghiệm nên được lắng nghe nhiều hơn","Đây là hành vi dùng chức danh/kinh nghiệm để 'khè' đồng đội, gây xung đột","Bình thường trong môi trường đa dạng kinh nghiệm","Cần BHL can thiệp ngay"],1),
+s(TH,"Khi làm việc trong Team, bạn nhận thấy ai đó đang có ý tưởng 'điên rồ' nhưng thú vị. Nên làm gì?",["Bác bỏ vì không thực tế","Khuyến khích chia sẻ và cùng khai thác ý tưởng đó","Chờ HLV đánh giá","Để người đó tự trình bày với BHL"],1),
+s(TH,"Nhóm bạn đang học theo cách truyền thống dù BHL đã góp ý. Đây được gọi là hành vi gì?",["Học theo phong cách riêng","Hoạt động mang tính đối phó trong Team","Sự sáng tạo trong học tập","Không tuân thủ phương pháp"],1),
+s(TH,"Bạn vừa hoàn thành chương trình và được xuống núi. Để nhận được giá trị từ Cộng đồng LDS, bạn cần làm gì?",["Chờ cộng đồng chủ động liên hệ","Tích cực tương tác, xây dựng mối quan hệ và tham gia các hoạt động cộng đồng","Đóng phí thành viên hàng năm","Chỉ cần theo dõi các nhóm chat"],1),
+s(TH,"Một học viên bị ghi vi phạm vào Golden Board nhưng chưa được xác nhận với người đó trước khi công bố chính thức. Điều này có phù hợp không?",["Không ảnh hưởng vì vi phạm là thật","Không phù hợp – phải xác nhận với người vi phạm trước khi công bố","Tùy thuộc vào mức độ vi phạm","Chỉ cần thông báo Lớp Trưởng là đủ"],1),
+s(TH,"Nhóm trưởng muốn thiết lập luật chơi rất nghiêm khắc cho nhóm. Điều kiện là gì?",["Luật chơi do nhóm trưởng toàn quyền quyết định","Không được vi phạm Sổ Tay Huấn Luyện và phải được các thành viên thảo luận, đồng thuận","Phải được BHL phê duyệt từng điều khoản","Chỉ được áp dụng từ chủ đề thứ 2 trở đi"],1),
+s(TH,"Trong quá trình tranh luận, một thành viên liên tục đi lạc chủ đề. Nhóm Trưởng cần làm gì?",["Để thành viên đó nói hết ý","Lịch sự định hướng lại tranh luận về mục tiêu chủ đề","Nhờ HLV can thiệp ngay","Ghi vào Golden Board như một vi phạm"],1),
+s(TH,"Học viên phát hiện mình 'nợ' một chủ đề (fail). Bước tiếp theo hợp lý nhất là gì?",["Xin rời chương trình","Tận dụng cơ hội 'trả nợ' theo quy định, liên hệ BHL để biết cách thực hiện","Chờ BHL liên hệ","Tự ôn luyện và đăng ký thi lại không cần báo ai"],1),
+s(TH,"Nhóm bạn sắp trình bày và cần bất kỳ thành viên nào cũng có thể trả lời câu hỏi của BHL. Nhóm Trưởng cần đảm bảo điều gì?",["Chỉ người trình bày biết nội dung","Tất cả thành viên hiểu nội dung giống nhau và đồng thuận","Chỉ cần 2-3 người giỏi nhất sẵn sàng","Nhờ TC/A hỗ trợ trong buổi trình bày"],1),
+s(TH,"Khi kết thúc chủ đề, học viên đánh giá các thành viên khác dựa trên gì?",["Số buổi họp nhóm tham dự","Kỹ năng phụ trợ qua hành vi tương tác xuyên suốt chủ đề","Chất lượng bài nộp hàng tuần","Kết quả điểm cuối chủ đề"],1),
+s(TH,"Nhóm bạn cần tìm mọi cách gặp BHL khi cả nhóm bế tắc. Ưu tiên kênh nào cuối cùng?",["Nhờ Lớp Trưởng liên hệ hộ","Gặp trực tiếp – khi đã bí hoàn toàn với tất cả kênh khác","Gửi email chính thức","Đăng câu hỏi trên nhóm Facebook"],1),
+
+s(LY,"Theo phần 'Cách thức hỏi', ghi nhận câu hỏi và câu trả lời của Team phải được lưu ở đâu?",["Trong file cá nhân của Nhóm Trưởng","Trong File Hỏi - Đáp lưu ở thư mục tài nguyên của môn học","Chỉ trên nhóm chat của chủ đề","Trong biên bản cuối chủ đề"],1),
+s(LY,"Một câu hỏi 'có văn hóa' theo Sổ Tay cần tránh điều gì?",["Quá ngắn gọn","Có chứa sẵn câu trả lời bên trong câu hỏi","Được gửi trên nhóm chat","Đặt cho HLV vào giờ nghỉ"],1),
+s(TH,"Trong buổi huấn luyện, một học viên mở laptop riêng để xử lý việc cá nhân mà không báo BHL. Cách xử lý phù hợp nhất là gì?",["Tiếp tục dùng nếu không gây tiếng ồn","Thông báo BHL và mang máy tính ra ngoài làm việc nếu có việc gấp","Nhờ đồng đội che giúp để không bị nhắc","Chỉ cần tắt âm thanh là được"],1),
+
+s(LY,"Theo phần tranh luận và thấu hiểu, khi tranh luận cần thực hành điều gì?",["Lắng nghe chủ động và đặt góc nhìn khách quan","Bảo vệ quan điểm cá nhân đến cùng","Ưu tiên người nhiều chức danh","Chỉ nghe nhóm trưởng"],0),
+s(LY,"Một nguồn gốc phổ biến của xung đột trong Team là gì?",["Quá nhiều tài liệu","Đề cao cái tôi, không giữ cam kết, dùng chức danh để 'khè' đồng đội","Thiếu thời gian tea-break","Không có standee"],1),
+s(LY,"Khi xung đột xảy ra, ai chịu trách nhiệm kiểm soát tình huống trước tiên?",["Lớp Trưởng","Nhóm Trưởng","Ban Vận Hành","Bất kỳ ai lớn tuổi nhất"],1),
+s(LY,"Theo phần 'Làm sao để nhận giá trị' của Cộng đồng LDS, điều quan trọng là gì?",["Chờ cộng đồng chủ động mang cơ hội đến","Tương tác, xây dựng mối quan hệ và cùng tham gia hoạt động cộng đồng","Chỉ cần có chứng chỉ","Chỉ cần tham gia nhóm chat"],1),
+s(LY,"Ngày 27/02 được xem là gì với chương trình?",["Ngày phỏng vấn đầu tiên","Ngày hội truyền thống của chương trình","Ngày tổng kết mùa","Ngày khai giảng chính thức"],1),
+s(LY,"Trong tranh luận, vì sao không nên dập tắt ý tưởng có vẻ điên rồ quá sớm?",["Vì sẽ mất thời gian hơn","Vì nhiều ý tưởng giá trị thường đến từ những ý tưởng có vẻ điên rồ","Vì HLV thích nghe mọi thứ","Vì đó là cách lấy điểm"],1),
+s(LY,"Khi Team thật sự bế tắc và quá bi quan về tình huống, kênh nào là ưu tiên cuối cùng?",["Nhắn tin riêng cho bạn thân trong lớp","Gặp trực tiếp HLV","Chỉ gửi email","Đợi buổi học sau"],1),
+s(LY,"Theo bí quyết học tập, khi làm sai thì nên làm gì?",["Che lỗi để tránh bị đánh giá","Làm lại cho đến khi đạt kết quả như kỳ vọng","Đổi người chịu trách nhiệm","Chờ mùa sau sửa"],1),
+s(TH,"Trong tranh luận, một thành viên liên tục lấy chức danh hiện tại để phủ định ý kiến người khác. Nhóm nên nhìn nhận đây là gì?",["Lợi thế chuyên môn bình thường","Nguồn cơn dễ dẫn tới xung đột do cái tôi/chức danh","Dấu hiệu lãnh đạo tốt","Không ảnh hưởng đến Team"],1),
+s(TH,"Một học viên liên tục không cải thiện dù đã được cảnh báo qua nhiều chủ đề. Theo Sổ Tay, khả năng nào có thể xảy ra?",["Không có gì vì đã cảnh báo rồi","Ban Huấn Luyện có thể mời học viên ra khỏi chương trình","Chỉ trừ điểm truyền thông","Chỉ yêu cầu viết thêm bài thu hoạch"],1),
+
+s(LY,"Theo phần tranh luận và thấu hiểu, khi đã vào Team thì cần quên đi điều gì để khai thác tri thức lẫn nhau tốt hơn?",["Khác biệt về tuổi tác, kinh nghiệm, vị trí và thành công hiện có","Mục tiêu chủ đề","Luật chơi của Team","Từ điển năng lực"],0),
+s(LY,"Trong xử lý xung đột, điều gì có thể giúp học viên trưởng thành nhanh?",["Xung đột nhỏ được xử lý đúng cách","Tránh tranh luận hoàn toàn","Để HLV xử lý tất cả","Chỉ nghe người lớn tuổi"],0),
+s(LY,"Theo phần quyền đòi hỏi, HLV đảm nhận vai trò gì trong hình ảnh minh họa của Sổ Tay?",["Người mẹ trong câu 'Con khóc, mẹ cho bú'","Người giám khảo độc lập","Người quản lý lớp","Người kiểm tra tài chính"],0),
+s(LY,"Theo giá trị trong mơ của cộng đồng LDS, cộng đồng được kỳ vọng là gì?",["Sân chơi lãnh đạo số chất lượng số một Việt Nam","Một nhóm chat hỗ trợ việc làm","Một câu lạc bộ chỉ dành cho BHL","Một kênh marketing của chương trình"],0),
+s(TH,"Một Team tranh luận rất sôi nổi nhưng càng lúc càng lan man, xa mục tiêu chủ đề. Nhóm Trưởng nên làm gì?",["Để tiếp tục vì đang nhiệt","Đưa tranh luận quay lại mục tiêu chủ đề và luật chơi","Ngắt luôn mọi tranh luận","Chờ HLV nhắc"],1),
+s(TH,"Thành viên A nhiều kinh nghiệm nên thường phủ định ý tưởng của thành viên mới. Theo Sổ Tay, Team nên nhìn nhận ra sao?",["Bình thường vì kinh nghiệm cao hơn","Cần tránh dập tắt ý tưởng sớm và khai thác góc nhìn đa dạng","Để A quyết luôn cho nhanh","Chỉ HLV mới được góp ý"],1),
+s(TH,"Một học viên bị đánh giá dưới mục tiêu ở một chủ đề nhưng có thái độ chủ động xin cơ hội sửa và cải thiện. Theo tinh thần chương trình, hướng xử lý phù hợp là gì?",["Loại ngay","Cho cơ hội trả nợ/cải thiện theo hướng dẫn của BHL","Bỏ qua luôn không cần theo dõi","Chuyển sang mùa sau"],1),
+s(TH,"Trong Team có xung đột lớn, nhưng Nhóm Trưởng lại bỏ mặc vì sợ mất lòng. Theo Sổ Tay, điều này dẫn tới rủi ro gì?",["Không có gì","Giảm nhiệt huyết Team và cho thấy Nhóm Trưởng chưa làm tròn vai trò kiểm soát tình huống","Chỉ ảnh hưởng bài truyền thông","Chỉ ảnh hưởng check-in"],1),
+s(TH,"Một học viên chờ cộng đồng LDS tự mang cơ hội đến sau khi Xuống Núi mà không hề tương tác hay tham gia hoạt động. Kết quả dễ xảy ra là gì?",["Vẫn nhận đầy đủ giá trị","Khó nhận được giá trị vì quan hệ cần được đầu tư vun đắp","Chỉ mất quyền dùng hashtag","Không ảnh hưởng"],1),
+s(TH,"Team đã có luật chơi và chế tài, nhưng khi xung đột xảy ra lại bỏ qua toàn bộ, không áp dụng gì. Theo góc nhìn leadership, vấn đề ở đâu?",["Không có vấn đề","Thiếu thực hành dẫn dắt và không giữ được kỷ luật Team","Chỉ do thành viên chưa hiểu bài","Chỉ do thiếu thời gian"],1),
+];
+
+
+
+
+for(let i=1;i<=5;i++){
+  SETS[i]=prepareBank(i, SETS[i]);
+}
+
+// Browser-level persistence and one-attempt lock
+
+const QUIZ_STATE_KEY='dlc_quiz_5bode_inprogress_v2';
+const QUESTIONS_PER_ATTEMPT=40;
+function isLocked(){ return false; }
+function lockQuiz(){ return; }
+function saveProgress(){
+  if(submitted || !activeQ.length) return;
+  const payload={selSet,activeQ,answers,cur,remaining};
+  localStorage.setItem(QUIZ_STATE_KEY, JSON.stringify(payload));
+}
+function clearProgress(){ localStorage.removeItem(QUIZ_STATE_KEY); }
+function loadProgress(){
+  try { return JSON.parse(localStorage.getItem(QUIZ_STATE_KEY)||'null'); }
+  catch { return null; }
+}
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+
+function blueprintForSet(setId){
+  if(setId===4) return {ly:22, th:18, diff:{E:9,M:15,H:16}};
+  if(setId===5) return {ly:22, th:18, diff:{E:6,M:14,H:20}};
+  return {ly:24, th:16, diff:{E:10,M:16,H:14}};
+}
+function takeRandom(pool, n){
+  return shuffle(pool).slice(0, Math.max(0, Math.min(n, pool.length)));
+}
+function pickQuestions(bank, setId=0){
+  const bp=blueprintForSet(setId);
+  let chosen=[];
+  const lyPool=bank.filter(q=>q.t===LY);
+  const thPool=bank.filter(q=>q.t===TH);
+  chosen.push(...takeRandom(lyPool, bp.ly));
+  const chosenKeys=new Set(chosen.map(q=>q.q));
+  const thAvail=thPool.filter(q=>!chosenKeys.has(q.q));
+  chosen.push(...takeRandom(thAvail, bp.th));
+  let dedup=new Map(chosen.map(q=>[q.q,q]));
+  chosen=[...dedup.values()];
+
+  // Difficulty rebalance
+  const diffTarget=bp.diff;
+  const currentCount=(d)=>chosen.filter(q=>q.d===d).length;
+  const allPool=shuffle(bank.filter(q=>!chosen.some(c=>c.q===q.q)));
+  for(const d of ['E','M','H']){
+    while(currentCount(d) < diffTarget[d]){
+      const candIdx=allPool.findIndex(q=>q.d===d && !chosen.some(c=>c.q===q.q));
+      if(candIdx<0) break;
+      const cand=allPool.splice(candIdx,1)[0];
+      const replaceIdx=chosen.findIndex(q=>q.d!==d && ((cand.t===LY && q.t===LY) || (cand.t===TH && q.t===TH)));
+      if(replaceIdx>=0) chosen.splice(replaceIdx,1,cand);
+      else chosen.push(cand);
+    }
+  }
+
+  // Normalize to exact 40
+  chosen=shuffle(chosen);
+  if(chosen.length<QUESTIONS_PER_ATTEMPT){
+    const remain=shuffle(bank.filter(q=>!chosen.some(c=>c.q===q.q)));
+    chosen.push(...remain.slice(0, QUESTIONS_PER_ATTEMPT-chosen.length));
+  }
+  chosen=chosen.slice(0, QUESTIONS_PER_ATTEMPT).map(q=>shuffleOptions(cloneQuestion(q)));
+  return shuffle(chosen);
+}
+
+function updateResumeBox(){
+  const box=document.getElementById('resumeBox');
+  const state=loadProgress();
+  if(isLocked()){
+    box.style.display='block';
+  }
+  if(state && state.activeQ?.length){
+    const done=(state.answers||[]).filter(a=>a>=0).length;
+    box.style.display='block';
+    box.innerHTML=`<strong>Phát hiện phiên làm bài chưa hoàn tất.</strong><br>Đã trả lời <strong>${done}/${state.activeQ.length}</strong> câu, còn <strong>${Math.max(0,state.activeQ.length-done)}</strong> câu. Khi bấm bắt đầu, hệ thống sẽ tiếp tục đúng trạng thái cũ. Bạn cũng có thể tạo đề mới để luyện tập lại từ đầu.`;
+    return;
+  }
+  box.style.display='none';
+}
+
+// State
+let selSet=0, activeQ=[], answers=[], cur=0, submitted=false, timerInt=null, remaining=40*60;
+
+function pickSet(n){
+  selSet=n;
+  document.querySelectorAll('.set-item').forEach(el=>{
+    el.classList.toggle('active', parseInt(el.dataset.set)===n);
+  });
+}
+
+
+function startQuiz(){
+  const saved=loadProgress();
+  if(saved && saved.activeQ?.length){
+    selSet=saved.selSet ?? selSet;
+    activeQ=saved.activeQ;
+    answers=saved.answers || new Array(activeQ.length).fill(-1);
+    cur=saved.cur || 0;
+    submitted=false;
+    remaining=saved.remaining || 40*60;
+    document.getElementById('rSet').textContent=selSet===0?'RANDOM':'#'+selSet;
+  } else {
+    let bank=[];
+    if(selSet===0){
+      bank=[...SETS[1],...SETS[2],...SETS[3],...SETS[4],...SETS[5]];
+      activeQ=pickQuestions(bank, 0);
+      document.getElementById('rSet').textContent='RANDOM';
+    } else {
+      bank=SETS[selSet];
+      activeQ=pickQuestions(bank, selSet);
+      document.getElementById('rSet').textContent='#'+selSet;
+    }
+    answers=new Array(activeQ.length).fill(-1);
+    cur=0; submitted=false; remaining=40*60;
+    saveProgress();
+  }
+  document.getElementById('startScreen').classList.remove('on');
+  document.getElementById('quizScreen').classList.add('on');
+  buildDots();
+  renderQ();
+  startTimer();
+}
+
+
+function startTimer(){
+  timerInt=setInterval(()=>{
+    remaining--;
+    if(remaining<=0){clearInterval(timerInt);doSubmit();}
+    const m=Math.floor(remaining/60), s2=remaining%60;
+    const el=document.getElementById('timer');
+    el.textContent=(m<10?'0':'')+m+':'+(s2<10?'0':'')+s2;
+    if(remaining<=300) el.classList.add('warn');
+    saveProgress();
+  },1000);
+}
+
+function buildDots(){
+  const nav=document.getElementById('qNav');
+  nav.innerHTML='';
+  for(let i=0;i<activeQ.length;i++){
+    const d=document.createElement('div');
+    d.className='dot'+(i===0?' cur':'');
+    d.id='dot'+i; d.textContent=i+1;
+    d.onclick=(()=>{const x=i;return()=>goTo(x);})();
+    nav.appendChild(d);
+  }
+}
+
+function renderQ(){
+  const q=activeQ[cur];
+  const totalQ = activeQ.length;
+  document.getElementById('progText').textContent='Câu '+(cur+1)+' / '+totalQ;
+  document.getElementById('progSub').textContent='Đã trả lời: '+answers.filter(a=>a>=0).length+'/'+totalQ+' câu';
+  document.getElementById('pbFill').style.width=((cur+1)/totalQ*100)+'%';
+  document.getElementById('prevBtn').style.display=cur>0?'':'none';
+  document.getElementById('nextBtn').style.display=cur<totalQ-1?'':'none';
+  document.getElementById('submitBtn').style.display=cur===totalQ-1?'':'none';
+  document.getElementById('qWrap').innerHTML=`
+    <div class="q-card">
+      <div class="meta-row">
+        <span class="badge ${q.t==='Lý thuyết'?'b-ly':'b-th'}">${q.t}</span>
+        <span class="badge ${diffBadgeClass(q.d)}">${diffLabel(q.d)}</span>
+      </div>
+      <div class="q-num">Câu ${cur+1}</div>
+      <div class="q-text">${q.q}</div>
+      <div class="q-tags">
+        <div><strong>Chapter/Section:</strong> ${q.chapter}</div>
+        <div><strong>Role liên quan:</strong> ${q.roles.join(', ')}</div>
+        <div><strong>Keyword tình huống:</strong> ${q.scenarioKeywords.length ? q.scenarioKeywords.join(', ') : '—'}</div>
+      </div>
+      ${q.o.map((o,i)=>`
+      <div class="opt${answers[cur]===i?' sel':''}" onclick="sel(${i})">
+        <input type="radio" name="q" ${answers[cur]===i?'checked':''}>
+        <label>${String.fromCharCode(65+i)}. ${o}</label>
+      </div>`).join('')}
+    </div>`;
+  updDots();
+}
+
+function sel(i){if(submitted)return;answers[cur]=i;saveProgress();renderQ();}
+function goTo(i){cur=i;saveProgress();renderQ();}
+function prevQ(){if(cur>0){cur--;saveProgress();renderQ();}}
+function nextQ(){if(cur<activeQ.length-1){cur++;saveProgress();renderQ();}}
+function updDots(){
+  for(let i=0;i<activeQ.length;i++){
+    const d=document.getElementById('dot'+i);
+    if(d) d.className='dot'+(i===cur?' cur':answers[i]>=0?' done':'');
+  }
+}
+
+
+function confirmSubmit(){
+  const totalQ = activeQ.length;
+  const unanswered = answers.map((a,i)=>a<0?i+1:null).filter(Boolean);
+  const u=unanswered.length;
+  const missHtml = u>0
+    ? `<p style="color:#c62828;margin-top:.5rem"><strong>Còn ${u} câu chưa trả lời:</strong><br><span style="display:inline-block;margin-top:6px;line-height:1.8">${unanswered.join(', ')}</span></p>`
+    : '<p style="color:#2e7d32;margin-top:.5rem">Bạn đã trả lời đầy đủ tất cả câu hỏi.</p>';
+  document.getElementById('confirmMsg').innerHTML=
+    `<p>Bạn đã trả lời <strong>${totalQ-u}/${totalQ}</strong> câu.</p>` + missHtml +
+    `<p style="margin-top:.75rem;color:#666">Sau khi nộp bạn có thể quay lại để làm bộ đề mới.</p>`;
+  document.getElementById('quizScreen').classList.remove('on');
+  document.getElementById('confirmScreen').classList.add('on');
+}
+
+
+function backToQuiz(){
+  document.getElementById('confirmScreen').classList.remove('on');
+  document.getElementById('quizScreen').classList.add('on');
+}
+
+function doSubmit(){
+  clearInterval(timerInt);
+  submitted=true;
+  clearProgress();
+  const totalQ = activeQ.length;
+  const correct=activeQ.reduce((s,q,i)=>s+(answers[i]===ans(q)?1:0),0);
+  const pct=Math.round(correct/totalQ*100);
+  const pass=correct>=Math.ceil(totalQ*0.9);
+  document.getElementById('confirmScreen').classList.remove('on');
+  document.getElementById('quizScreen').classList.remove('on');
+  document.getElementById('resultScreen').classList.add('on');
+  document.getElementById('scoreBig').textContent=pct+'%';
+  document.getElementById('scoreBig').className='score-big '+(pass?'pass':'fail');
+  document.getElementById('verdict').textContent=pass?'ĐẠT – Chúc mừng!':'CHƯA ĐẠT – Cần ôn lại';
+  document.getElementById('verdict').className='verdict '+(pass?'v-pass':'v-fail');
+  document.getElementById('rC').textContent=correct;
+  document.getElementById('rW').textContent=answers.filter((a,i)=>a>=0&&a!==ans(activeQ[i])).length;
+  document.getElementById('rS').textContent=answers.filter(a=>a<0).length;
+  const meta = selSet===0 ? 'Đề luyện tập random liên bộ • Blueprint cân bằng lý thuyết/tình huống • Đáp án đã shuffle' : `${SET_META[selSet].name} • ${SET_META[selSet].topic}`;
+  document.getElementById('resultMeta').textContent=meta;
+}
+
+
+function showReview(){
+  const rv=document.getElementById('reviewArea');
+  rv.style.display='block';
+  const groups=[
+    {key:'Lý thuyết', title:'Nhóm Lý thuyết'},
+    {key:'Tình huống', title:'Nhóm Tình huống'}
+  ];
+  rv.innerHTML=groups.map(g=>{
+    const items=activeQ.map((q,i)=>({q,i})).filter(x=>x.q.t===g.key);
+    const correct=items.filter(({q,i})=>answers[i]===ans(q)).length;
+    return `<div class="group-title">${g.title}</div>
+      <div class="group-sub">${correct}/${items.length} câu đúng</div>` +
+      items.map(({q,i})=>{
+        const ua=answers[i],ca=ans(q);
+        const st=ua<0?['Bỏ qua','skip-tag']:ua===ca?['Đúng','correct-tag']:['Sai','wrong-tag'];
+        return`<div class="rv-q">
+          <div class="rv-top">
+            <div class="meta-row">
+              <span class="badge ${q.t==='Lý thuyết'?'b-ly':'b-th'}">${q.t} – Câu ${i+1}</span>
+              <span class="badge ${diffBadgeClass(q.d)}">${diffLabel(q.d)}</span>
+            </div>
+            <span class="rv-status ${st[1]}">${st[0]}</span>
+          </div>
+          <div style="font-size:14px;line-height:1.6;margin-bottom:.35rem">${q.q}</div>
+          <div class="q-tags" style="margin-bottom:.65rem">
+            <div><strong>Chapter/Section:</strong> ${q.chapter}</div>
+            <div><strong>Role liên quan:</strong> ${q.roles.join(', ')}</div>
+            <div><strong>Keyword tình huống:</strong> ${q.scenarioKeywords.length ? q.scenarioKeywords.join(', ') : '—'}</div>
+          </div>
+          ${q.o.map((o,j)=>{
+            let cls='opt';
+            if(j===ca)cls+=' correct';
+            else if(j===ua&&ua!==ca)cls+=' wrong';
+            return`<div class="${cls}"><input type="radio" disabled ${j===ca?'checked':''}><label style="font-size:13px">${String.fromCharCode(65+j)}. ${o}${j===ca?' ✓':j===ua&&ua!==ca?' ✗':''}</label></div>`;
+          }).join('')}
+        </div>`;
+      }).join('');
+  }).join('');
+  document.getElementById('reviewBtn').textContent='Đã xem đáp án';
+  document.getElementById('reviewBtn').disabled=true;
+  rv.scrollIntoView({behavior:'smooth'});
+}
+
+
+function startFreshQuiz(){
+  clearProgress();
+  activeQ=[]; answers=[]; cur=0; remaining=40*60; submitted=false;
+  updateResumeBox();
+  startQuiz();
+}
+function restartPractice(){
+  clearInterval(timerInt);
+  clearProgress();
+  activeQ=[]; answers=[]; cur=0; remaining=40*60; submitted=false;
+  document.getElementById('resultScreen').classList.remove('on');
+  document.getElementById('confirmScreen').classList.remove('on');
+  document.getElementById('quizScreen').classList.remove('on');
+  document.getElementById('startScreen').classList.add('on');
+  document.getElementById('reviewArea').style.display='none';
+  document.getElementById('reviewBtn').textContent='Xem đáp án chi tiết';
+  document.getElementById('reviewBtn').disabled=false;
+  updateResumeBox();
+}
+updateResumeBox();
+</script>
+</body>
+</html>
